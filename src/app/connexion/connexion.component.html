@@ -1,0 +1,22 @@
+<!-- Section: Design Block -->
+<section class="text-center">
+  <!-- Background image -->
+  <div
+    class="p-5 bg-image"
+    style="
+      background-image: url('https://mdbootstrap.com/img/new/textures/full/171.jpg');
+      height: 300px;
+    "
+  ></div>
+  <!-- Background image -->
+
+  <div *ngIf="isSigningIn; then signin; else signup"></div>
+
+  <ng-template #signin>
+    <app-sign-in (toggleSign)="toggleSign($event)"></app-sign-in>
+  </ng-template>
+  <ng-template #signup>
+    <app-sign-up (toggleSign)="toggleSign($event)"></app-sign-up>
+  </ng-template>
+</section>
+<!-- Section: Design Block -->

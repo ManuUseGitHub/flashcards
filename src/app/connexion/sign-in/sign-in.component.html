@@ -1,0 +1,73 @@
+<div class="container">
+  <div class="row">
+    <div
+      class="card mx-auto px-md-5 col-xs-12 col-lg-6 shadow-5-strong bg-body-tertiary"
+      style="margin-top: -100px; backdrop-filter: blur(30px)"
+    >
+      <div class="card-body row">
+        <div class="col justify-content-center">
+          <h2 class="fw-bold mb-5">Connect to your account</h2>
+          <form>
+            <!-- Email input -->
+            <div data-mdb-input-init class="form-outline mb-4">
+              <input
+                placeholder="Email address"
+                type="email"
+                id="form3Example3"
+                class="form-control"
+              />
+            </div>
+
+            <!-- Password input -->
+            <div data-mdb-input-init class="form-outline mb-4">
+              <input
+                placeholder="Password"
+                type="password"
+                id="form3Example4"
+                class="form-control"
+              />
+            </div>
+
+            <div class="row text-center">
+              <div class="col-6 d-flex justify-items-center">
+                <div class="flex-1 content-center">
+                  <button
+                    type="submit"
+                    data-mdb-button-init
+                    data-mdb-ripple-init
+                    class="btn btn-primary p-3"
+                  >
+                    Connect
+                  </button>
+                </div>
+              </div>
+              <div class="col-6">
+                <!-- Register buttons -->
+
+                <p>Or use</p>
+                <button
+                  type="button"
+                  data-mdb-button-init
+                  data-mdb-ripple-init
+                  class="btn btn-primary rounded-circle"
+                >
+                  <fa-icon [icon]="icons.google"></fa-icon>
+                </button>
+              </div>
+              <div class="col-12">
+                <hr />
+                <button
+                  class="btn btn-link"
+                  (click)="toggleSignIn(); $event.preventDefault()"
+                >
+                  I create my account
+                </button>
+              </div>
+            </div>
+            <!-- Submit button -->
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
