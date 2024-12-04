@@ -1,0 +1,4 @@
+dutch;french;type;article;tags;theme
+dokter;médecin;noun;de;medical, profession, healthcare;Healthcare
+leraar;enseignant;noun;de;education, teaching, profession;Education
+programmeur;programmeur;noun;de;IT, technology, software;Technology

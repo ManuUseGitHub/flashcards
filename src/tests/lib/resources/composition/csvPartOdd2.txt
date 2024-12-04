@@ -1,0 +1,5 @@
+dutch     ;french;type;articleOdd;tags;theme
+architect ;architecte;noun;de;design, construction, planning;Construction
+kok       ;cuisinier;noun;de;cooking, food, profession;Culinary Arts
+piloot    ;pilote;noun;de;aviation, travel, profession;Transportation
+advocaat  ;avocat;noun;de;law, justice, profession;Legal

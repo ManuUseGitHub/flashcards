@@ -1,0 +1,9 @@
+dutch    ;french;     type;id;article;part;tags;chapter      ;theme;date;issuer;difficulty
+oma / grootmoeder;grand-mère;;74e8eaa1-1ad4-4c45-a608-92354804fe0a;;;;;;1729780136390;;-1    
+opa / grootvader;grand-père;;d53db2fa-513a-420c-aac7-18c747fa0be6;;;;;;1729780136390;;-1
+moeder;mère;;8451b4a5-1a09-4b75-bac3-2e4b3739750c;;;;;;1729780136390;;-1
+vader;père;;a94d4a57-ab07-4304-bb91-9b1e698e43f6;;;;;;1729780136390;;-1
+oom;oncle;;767491f6-46a0-4f09-a842-70c3099287a7;	;;;;     ;1729780136390;;-1
+tante;tante;;49519681-1fa0-4b74-877a-85cc502ec31c;;;;;;1729780136390;;-1
+neef;cousin    ;;ecee9060-ecfa-4814-87d5-d895f640a53c;;;;;;1729780136390;;-1
+nicht;cousine;;     8f54c017-db4a-4a93-9adc-5350cc5afa56;;;;;;1729780136390;;-1

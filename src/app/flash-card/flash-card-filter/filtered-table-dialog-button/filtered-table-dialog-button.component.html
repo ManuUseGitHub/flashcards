@@ -1,0 +1,14 @@
+<app-flnl-modal [formGroup]="filterForm">
+  <div button>
+    <ng-content></ng-content>
+  </div>
+  <ng-template #body>
+    <div class="container stretched-table">
+      <app-cards-data-table
+        [cards]="composedList"
+        [dataSource]="dataSource"
+      ></app-cards-data-table>
+    </div>
+  </ng-template>
+  <ng-template #actions></ng-template>
+</app-flnl-modal>

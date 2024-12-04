@@ -1,0 +1,36 @@
+<div (click)="$event.stopPropagation()">
+  <label class="form-label">{{ intro }}</label>
+  <div *ngIf="options.length; else unloaded">
+    <div class="flex flex-wrap gap-3">
+      <button
+        *ngFor="let option of options"
+        (click)="$event.preventDefault(); toggleTag(option)"
+        [ngClass]="{
+          'btn-primary': isSelected(option),
+          'btn-secondary': !isSelected(option)
+        }"
+        (focusin)="setIsFocused(true, option)"
+        (focusout)="setIsFocused(false, option)"
+        (mouseenter)="setIsHover(true, option)"
+        (mouseleave)="setIsHover(false, option)"
+        class="btn btn-sm transition-all duration-200 shadow-sm relative"
+      >
+        {{ option }}
+        <fa-icon
+          [icon]="isSelected(option) ? faCircleCheck : faCircle"
+        ></fa-icon>
+        <span
+          [ngClass]="{ hinting: isFocused(option) && !isHover(option) }"
+          class="round-badge position-absolute top-0 start-100 translate-middle p-2 bg-danger border border-light rounded-circle"
+        >
+          <span class="visually-hidden">New alerts</span>
+        </span>
+      </button>
+    </div>
+  </div>
+  <ng-template #unloaded>
+    <div class="alert alert-warning" role="alert">
+      nothing to pick ! <fa-icon [icon]="faFaceDizzy"></fa-icon>
+    </div>
+  </ng-template>
+</div>

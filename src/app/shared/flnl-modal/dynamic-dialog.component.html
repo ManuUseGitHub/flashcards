@@ -1,0 +1,23 @@
+<ng-template
+  *ngIf="data.titleTemplate; else fallbackTitle"
+  (click)="$event.stopPropagation()"
+>
+  <div mat-dialog-title>
+    <ng-container *ngTemplateOutlet="data.titleTemplate"></ng-container>
+  </div>
+</ng-template>
+<div mat-dialog-content (click)="$event.stopPropagation()">
+  <ng-container *ngTemplateOutlet="data.bodyTemplate"></ng-container>
+</div>
+<div mat-dialog-actions class="container" (click)="$event.stopPropagation()">
+  <div class="container flex gap-1 justify-center">
+    <ng-container *ngTemplateOutlet="data.actionsTemplate"></ng-container>
+  </div>
+</div>
+
+<ng-template mat-dialog-title #fallbackTitle>
+  <div mat-dialog-title class="flex text-end">
+    <fa-icon [icon]="icons.x" class="close"></fa-icon>
+  </div>
+  <hr class="m-0" />
+</ng-template>

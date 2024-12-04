@@ -1,0 +1,39 @@
+<!-- Sidebar Toggle Button (only visible on small screens) -->
+<button
+  (click)="toggleSidebar()"
+  class="md:hidden bg-blue-600 text-white px-4 py-2 m-4 rounded"
+>
+  Toggle Sidebar
+</button>
+
+<div class="flex">
+  <!-- Sidebar -->
+  <nav
+    [ngClass]="{
+      hidden: !isSidebarVisible && isSmallScreen,
+      block: isSidebarVisible || !isSmallScreen
+    }"
+    class="text-white p-4 w-64 min-h-screen md:block"
+  >
+    <div class="w-full space-y-1">
+      <h1 class="size-5 mb-8">Presets</h1>
+      <div *ngFor="let preset of presetList">
+        <app-surprise-button-group
+          (choice)="executePresetChoice($event, preset)"
+          [actions]="{
+            right: icons.dumbbell,
+            center: preset.name || 'null',
+            left: icons.trash
+          }"
+        ></app-surprise-button-group>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Main Content -->
+  <div class="flex-1 p-6">
+    <h1 id="app-title" class="text-5xl font-bold text-center text-white">{{ title }}</h1>
+    <app-edit-entity></app-edit-entity>
+    <app-flash-card-filter></app-flash-card-filter>
+  </div>
+</div>

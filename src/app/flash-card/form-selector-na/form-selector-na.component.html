@@ -1,0 +1,19 @@
+<div [formGroup]="filterForm">
+  <label *ngIf="!isCompact" [for]="controlName" ngClass="form-label">{{
+    text
+  }}</label>
+  <select
+    [id]="controlName"
+    [formControlName]="controlName"
+    class="form-select"
+    [ngClass]="getClassIfDefault"
+  >
+    <option [value]="'*'">{{ !isCompact ? "N/A" : text + " n/a" }}</option>
+    <option *ngFor="let specific of specifics" [value]="specific.value">
+      {{ specific.option }}
+    </option>
+    <option *ngFor="let option of options" [value]="option">
+      {{ option }}
+    </option>
+  </select>
+</div>

@@ -1,0 +1,23 @@
+.flip-card {
+    height: 50vw;
+    min-height: 40vh;
+
+    .flip-card-front,
+    .flip-card-back {
+        background-color: #f9fafb;
+        color: #333;
+        width: 100%;
+        border-radius: 10px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        transition: transform 0.5s ease-in-out;
+    }
+}
+
+.preset {
+    width: unset;
+}
+
+.tab-content {
+    border: thin solid lightgray;
+    border-top: none;
+}

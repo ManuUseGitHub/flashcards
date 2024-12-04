@@ -1,0 +1,20 @@
+<input
+  type="file"
+  class="file-input"
+  (change)="onFileSelected($event)"
+  [multiple]="isMultiple"
+  #fileUpload
+/>
+
+<div class="file-upload">
+  <button
+    class="btn btn-primary upload-btn"
+    (click)="$event.preventDefault(); fileUpload.click()"
+  >
+    <ng-template *ngIf="child; then child; else button"> </ng-template>
+  </button>
+</div>
+<ng-template #button>
+  <fa-icon [icon]="icons.down"></fa-icon>
+  import
+</ng-template>

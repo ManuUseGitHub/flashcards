@@ -1,0 +1,11 @@
+dutch *  ;      french *      ;type;                 id                 ;article;part;tags;chapter;theme;date;issuer;difficulty
+Doen                        ;      faire       ;    ;8ed90092-b241-4b2e-bafa-f4a57163fdb6;       ;    ;    ;       ;     ; -1 ;      ;    -1
+Maken ;"fabriquer; créer"; ;d08400d6-53b6-4031-9db6-d4902cb6cd70;       ;    ;    ;       ;     ; -1 ;      ;    -1
+Studeren                    ;     étudier      ;    ;bb8dfc46-4a0b-4239-8390-b24ab37b46b6;       ;    ;    ;       ;     ; -1 ;      ;    -1
+Werken                      ;    travailler    ;    ;2bb61e01-e748-46c9-b0a2-1a6ed141538d;       ;    ;    ;       ;     ; -1 ;      ;    -1
+Antwoorden                  ;     répondre     ;    ;5fa6a8a2-dcf8-4541-85e1-5147b929d768;       ;    ;    ;       ;     ; -1 ;      ;    -1
+Vragen                      ;     demander     ;    ;f2c69c64-b38c-4f5b-b8d5-e7536fff2d79;       ;    ;    ;       ;     ; -1 ;      ;    -1
+Leren                       ;    apprendre     ;    ;49ecf9dc-bd70-403d-83f2-4d93638d487b;       ;    ;    ;       ;     ; -1 ;      ;    -1
+Blijven                     ;      rester      ;    ;8c76b427-b811-4d64-a8a8-b0c8606aeef5;       ;    ;    ;       ;     ; -1 ;      ;    -1
+Spelen                      ;      jouer       ;    ;20e27f30-1c4a-4c81-926c-89b2f631ab0f;       ;    ;    ;       ;     ; -1 ;      ;    -1
+Kennen                      ;    connaître     ;    ;e54f33fc-9687-4ea7-97ea-f40f8b5052ea;       ;    ;    ;       ;     ; -1 ;      ;    -1

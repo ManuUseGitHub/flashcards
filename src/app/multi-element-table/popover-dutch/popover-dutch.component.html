@@ -1,0 +1,17 @@
+<app-popover-with-html [name]="'dutch-' + i" [maxWidth]="600" [formGroup]="row" (click)="$event.stopPropagation()">
+  <div
+    toggler
+    [innerHTML]="getDutch(row) | wordClouded : '(click to set)' : ' '"
+  ></div>
+  <div popo id="popo">
+    <app-auto-complete
+      [options]="articles"
+      name="article"
+      [inputGroup]="row"
+      [placeholder]="'Article'"
+    ></app-auto-complete>
+    <mat-form-field appearance="outline" class="w-full">
+      <textarea matInput formControlName="dutch" placeholder="Dutch"></textarea>
+    </mat-form-field>
+  </div>
+</app-popover-with-html>

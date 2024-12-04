@@ -1,0 +1,8 @@
+<!-- Button to open the dialog -->
+<button
+  mat-button
+  class="btn btn-primary"
+  (click)="openDialog(); $event.stopPropagation()"
+>
+  <ng-content selector="[button]"></ng-content>
+</button>

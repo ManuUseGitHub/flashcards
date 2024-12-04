@@ -1,0 +1,4 @@
+dutch;french;type;article;tags;theme
+verpleegkundige;infirmier;noun;de;medical, care, healthcare;Healthcare
+schilder;peintre;noun;de;art, creativity, profession;Arts
+verkoper;vendeur;noun;de;sales, commerce, retail;Commerce

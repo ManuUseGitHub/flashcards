@@ -1,0 +1,42 @@
+table {
+    max-width: 100%;
+
+    td {
+        overflow: visible;
+        max-width: 10%;
+    }
+}
+
+.mat-elevation-z8 {
+    box-shadow: 0px 4px 6px -1px rgba(0, 0, 0, 0.1), 0px 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
+button {
+    margin-top: 1rem;
+}
+
+/* Limit table width to its container */
+.mat-elevation-z8 {
+    width: 100%;
+    max-width: 100%;
+    overflow-x: auto;
+}
+
+/* Set the cell to use full height */
+.full-height-cell {
+    height: 100%;
+
+    padding: 0;
+    /* Remove padding if needed to use full cell height */
+}
+
+/* Ensure child elements take full height */
+.full-height-content {
+    height: 100%;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.cdk-footer-cell {
+    z-index: 8 !important;
+}

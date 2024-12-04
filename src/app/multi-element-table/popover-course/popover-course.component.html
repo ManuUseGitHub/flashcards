@@ -1,0 +1,26 @@
+<app-popover-with-html [name]="'chapter-' + i" [formGroup]="row" (click)="$event.stopPropagation()">
+  <div
+    toggler
+    [innerHTML]="getCourses(row) | wordClouded : '(click to set)' : '<br/>'"
+  ></div>
+  <div popo id="popo">
+    <app-auto-complete
+      [options]="chapters"
+      name="chapter"
+      [inputGroup]="row"
+      [placeholder]="'Chapter'"
+    ></app-auto-complete>
+    <app-auto-complete
+      [options]="themes"
+      name="theme"
+      [inputGroup]="row"
+      [placeholder]="'Theme'"
+    ></app-auto-complete>
+    <app-auto-complete
+      [options]="parts"
+      name="part"
+      [inputGroup]="row"
+      [placeholder]="'Part'"
+    ></app-auto-complete>
+  </div>
+</app-popover-with-html>

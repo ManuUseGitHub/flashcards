@@ -1,0 +1,84 @@
+<div class="container challenge-wrapper h-full d-flex flex-column">
+  <div class="row">
+    <!-- Flip Card Container -->
+    <div
+      class="col-md-8 max-w-3/6 px-0 flip-card mx-auto text-xl"
+      [ngClass]="{ flipped: isFlipped }"
+      (click)="flipCard()"
+    >
+      <div *ngIf="!composedList.length; else loaded">
+        <!-- Front of the card (before content is loaded) -->
+        <div class="flip-card-front d-flex justify-center items-center">
+          <p>Wait</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Navigation Button -->
+    <div class="col-md-8 max-w-3/6 px-0 mx-auto">
+      <div class="buttons mt-4 d-flex justify-center">
+        <button class="btn btn-danger btn-small" (click)="skip()">
+          skip <fa-icon [icon]="faChevronRight"></fa-icon>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Card Content (when loaded) -->
+<ng-template #loaded>
+  <!-- Front of the Card -->
+  <div class="flip-card-front">
+    <div class="d-flex justify-center items-center">
+      <p class="text-5xl">
+        {{ composedList[challangeIndex][isFromDutch ? "french" : "dutch"] }}
+      </p>
+    </div>
+    <div class="absolute row mb-2 bottom-0 w-full container">
+      <div class="col-xs-12">
+        <hr />
+        <h1 class="text-gray-500">{{ progress }}</h1>
+      </div>
+      <div class="col-md-8 d-flex justify-start"></div>
+    </div>
+  </div>
+  <!-- Back of the Card -->
+  <div class="flip-card-back flex-column">
+    <div class="d-flex justify-center items-center">
+      <div class="row">
+        <div class="col-xs-12">
+          <p class="text-5xl text-center">
+            {{ composedList[challangeIndex][isFromDutch ? "dutch" : "french"] }}
+          </p>
+        </div>
+        <div class="col-xs-12 text-center">
+          <button
+            class="btn btn-danger rounded-circle btn-lg mx-2"
+            (click)="$event.stopPropagation(); lose()"
+          >
+            <fa-icon [icon]="icons.x"></fa-icon>
+          </button>
+          <button
+            class="btn btn-primary rounded-circle btn-lg mx-2"
+            (click)="$event.stopPropagation(); win()"
+          >
+            <fa-icon [icon]="icons.check"></fa-icon>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Yes/No Buttons below the text -->
+    <div class="absolute row mb-2 bottom-0 w-full container">
+      <div class="col-xs-12"><hr /></div>
+      <div class="col d-flex justify-center">
+        <button
+          class="btn btn-warning mx-2"
+          (click)="$event.stopPropagation(); goBack()"
+        >
+          <fa-icon [icon]="icons.pen"></fa-icon>
+        </button>
+      </div>
+    </div>
+  </div>
+</ng-template>

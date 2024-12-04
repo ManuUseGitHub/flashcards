@@ -1,0 +1,152 @@
+<div
+  class="container mx-auto p-4"
+  (keydown)="setFocusDirection($event)"
+  (keyup)="setFocusDirection($event)"
+  [formGroup]="globalForm"
+>
+  <form [formGroup]="tableForm">
+    <table mat-table [dataSource]="dataSource" class="mat-elevation-z8 w-full">
+      <ng-container matColumnDef="actions">
+        <th mat-header-cell *matHeaderCellDef [formGroup]="globalForm">
+          <mat-checkbox
+            formControlName="all"
+            (click)="onCheckAll($event)"
+          ></mat-checkbox>
+        </th>
+        <td mat-cell *matCellDef="let row; let i = index" [formGroup]="row">
+          <mat-checkbox
+            (click)="saveValue($event, i)"
+            formControlName="actions"
+            [checked]="allSelected || checkTemp[i]"
+          ></mat-checkbox>
+        </td>
+        <td mat-footer-cell *matFooterCellDef [attr.colspan]="8">
+          <div class="flex justify-between">
+            <div class="flex gap4">
+              <button
+                class="btn btn-danger rounded"
+                [disabled]="checkedRows.length === 0"
+                (click)="deleteRows()"
+              >
+                <fa-icon [icon]="icons.trash"></fa-icon>
+                delete {{ checkedRows.length }} entries
+              </button>
+              <button class="btn btn-primary rounded-circle ml-4">
+                <fa-icon
+                  [icon]="icons.arrowRightArrowLeft"
+                  (click)="inverseSelection()"
+                ></fa-icon>
+              </button>
+            </div>
+            <mat-paginator
+              (page)="onPageChanged($event)"
+              [pageSizeOptions]="[5, 10, 20]"
+              showFirstLastButtons
+              aria-label="Select page of entries"
+            >
+            </mat-paginator>
+            <div class="flex gap-4">
+              <app-dialog-csv [csvForm]="csvForm"></app-dialog-csv>
+              <button
+                class="btn btn-primary rounded-circle"
+                color="primary"
+                (click)="addRow()"
+              >
+                <fa-icon [icon]="icons.plus"></fa-icon>
+              </button>
+            </div>
+          </div>
+          <hr />
+          <div class="flex justify-between gap-4 mb-4">
+            <a href="/"><fa-icon [icon]="icons.home"> </fa-icon>Go home</a>
+
+            <div class="flex justify-between">
+              <app-popover-file
+                [globalForm]="globalForm"
+                [files]="files"
+              ></app-popover-file>
+
+              <button
+                class="btn btn-primary rounded-circle"
+                color="accent"
+                (click)="onSaveChanges()"
+              >
+                <fa-icon [icon]="icons.floppy"></fa-icon>
+              </button>
+            </div>
+          </div>
+        </td>
+      </ng-container>
+      <!-- Type Kolom -->
+
+      <!-- French Kolom -->
+      <ng-container matColumnDef="french">
+        <th mat-header-cell *matHeaderCellDef>French</th>
+        <td mat-cell *matCellDef="let row; let i = index">
+          <app-popover-french [row]="row" [i]="i"></app-popover-french>
+        </td>
+        <td mat-footer-cell *matFooterCellDef hidden></td>
+      </ng-container>
+      <!-- Dutch Kolom -->
+      <ng-container matColumnDef="dutch">
+        <th mat-header-cell *matHeaderCellDef>Dutch</th>
+        <td mat-cell *matCellDef="let row; let i = index">
+          <app-popover-dutch
+            [row]="row"
+            [i]="i"
+            [articles]="articles"
+          ></app-popover-dutch>
+        </td>
+        <td mat-footer-cell *matFooterCellDef hidden></td>
+      </ng-container>
+      <!-- Article Kolom -->
+      <ng-container matColumnDef="analysis">
+        <th mat-header-cell *matHeaderCellDef>Analysis</th>
+        <td mat-cell *matCellDef="let row; let i = index">
+          <app-popover-analysis
+            [row]="row"
+            [i]="i"
+            [difficulties]="difficulties"
+            [types]="types"
+          ></app-popover-analysis>
+        </td>
+        <td mat-footer-cell *matFooterCellDef hidden></td>
+      </ng-container>
+      <!-- Theme Kolom -->
+      <ng-container matColumnDef="course">
+        <th mat-header-cell *matHeaderCellDef>Course</th>
+        <td mat-cell *matCellDef="let row; let i = index">
+          <app-popover-course
+            [row]="row"
+            [i]="i"
+            [themes]="themes"
+            [chapters]="chapters"
+            [parts]="parts"
+          ></app-popover-course>
+        </td>
+        <td mat-footer-cell *matFooterCellDef hidden></td>
+      </ng-container>
+      <!-- Tags Kolom -->
+      <ng-container matColumnDef="tags">
+        <th mat-header-cell *matHeaderCellDef>Tags</th>
+        <td mat-cell *matCellDef="let row; let i = index">
+          <app-popover-tags
+            [row]="row"
+            [i]="i"
+            [selectedMultiples]="selectedMultiples"
+          ></app-popover-tags>
+        </td>
+        <td mat-footer-cell *matFooterCellDef hidden></td>
+      </ng-container>
+
+      <!-- Header rij en datarijen -->
+      <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+      <tr
+        mat-row
+        *matRowDef="let row; columns: displayedColumns"
+        [formGroup]="row"
+      ></tr>
+      <tr mat-footer-row *matFooterRowDef="displayedColumns; sticky: true"></tr>
+    </table>
+  </form>
+</div>

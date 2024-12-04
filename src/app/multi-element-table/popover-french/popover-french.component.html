@@ -1,0 +1,20 @@
+<app-popover-with-html
+  [name]="'french-' + i"
+  [maxWidth]="600"
+  [formGroup]="row"
+  (click)="$event.stopPropagation()"
+>
+  <div
+    toggler
+    [innerHTML]="getFrench(row) | wordClouded : '(click to set)' : ' '"
+  ></div>
+  <div popo id="popo">
+    <mat-form-field appearance="outline" class="w-full">
+      <textarea
+        matInput
+        formControlName="french"
+        placeholder="French"
+      ></textarea>
+    </mat-form-field>
+  </div>
+</app-popover-with-html>

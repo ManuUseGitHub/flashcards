@@ -1,0 +1,30 @@
+<div [formGroup]="inputGroup">
+  <mat-form-field
+    appearance="outline"
+    [class]="myClass"
+    matAutocompleteOrigin
+    #origin="matAutocompleteOrigin"
+  >
+    <input
+      matInput
+      type="text"
+      [placeholder]="placeholder"
+      aria-label="Number"
+      #autoTrigger
+      [formControlName]="name"
+      [matAutocomplete]="auto"
+      (focusout)="lostFocus($event)"
+      (keyup)="handleKeyEscape($event)"
+      (focusin)="resetEscapeCount($event)"
+    />
+    <mat-autocomplete
+      autoActiveFirstOption
+      role="combobox"
+      #auto="matAutocomplete"
+    >
+      @for (option of filteredOptions | async; track option) {
+      <mat-option [value]="option">{{ option }}</mat-option>
+      }
+    </mat-autocomplete>
+  </mat-form-field>
+</div>

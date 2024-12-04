@@ -1,0 +1,104 @@
+.container.stretched {
+    height: 100%;
+    /* Ensure the container spans its parent */
+    display: flex;
+    flex: 1;
+}
+
+.mat-form-field.stretch-textarea {
+    display: flex;
+    /* Make the form field flexible */
+    flex: 1;
+    /* Allow it to expand and fill the available space */
+}
+
+.mat-form-field.stretch-textarea textarea {
+    flex: 1;
+    /* Let the textarea grow vertically */
+    height: 100%;
+    /* Ensure it takes full vertical space */
+    resize: none !important;
+    /* Optional: Prevent user resizing */
+    box-sizing: border-box;
+
+    /* Include padding and border in the height calculation */
+}
+
+::ng-deep {
+
+    svg {
+        height: 16px !important;
+    }
+
+    textarea.stretch-textarea,
+    div.editable-div {
+        font-family: courier;
+        overflow: auto;
+        white-space: nowrap;
+        font-size: 10pt;
+        letter-spacing: initial;
+        width: 100%;
+        text-align: center;
+    }
+
+    .csv-line {
+        &:nth-child(odd) {
+            background: #fbfbff;
+        }
+
+        &:hover {
+            background: #eeeeff;
+        }
+    }
+
+
+
+    .value-csv:nth-child(7n+1) {
+        color: rgb(147, 211, 127);
+    }
+
+    .value-csv:nth-child(7n+2) {
+        color: rgb(183, 62, 147);
+    }
+
+    .value-csv:nth-child(7n+3) {
+        color: rgb(239, 147, 55);
+    }
+
+    .value-csv:nth-child(7n+4) {
+        color: rgb(49, 182, 211);
+    }
+
+    .value-csv:nth-child(7n+5) {
+        color: rgb(237, 30, 102);
+    }
+
+    .value-csv:nth-child(7n+6) {
+        color: rgb(47, 47, 115);
+    }
+
+    .value-csv:nth-child(7n+7) {
+        color: rgb(112, 112, 203);
+    }
+
+    .bg-primary {
+        background: #0d6efd linear-gradient(225deg,
+                rgb(139 134 221) 0%,
+                rgba(0, 161, 255, 0) 100%);
+        background: rgb(48 64 107) linear-gradient(225deg,
+                rgb(139 134 221) 0%,
+                rgba(0, 161, 255, 0) 100%);
+    }
+
+    .line-errored {
+        background-color: salmon !important;
+
+        span {
+            color: white !important
+        }
+    }
+}
+
+.text-format {
+    border-radius: 5px;
+}

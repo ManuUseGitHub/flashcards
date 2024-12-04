@@ -1,0 +1,5 @@
+dutch *  ;      french *      ;type;                 id                 ;article;part;tags;chapter;theme;date;issuer;difficulty
+""                        ;      faire       ;    ;8ed90092-b241-4b2e-bafa-f4a57163fdb6;       ;    ;    ;       ;     ; -1 ;      ;    -1
+Maken ;"fabriquer; créer"; ;d08400d6-53b6-4031-9db6-d4902cb6cd70;       ;    ;    ;       ;     ; -1 ;      ;    -1
+Studeren                    ;           ;    ;bb8dfc46-4a0b-4239-8390-b24ab37b46b6;       ;    ;    ;       ;     ; -1 ;      ;    -1
+Werken                      ;    travailler    ;    ;2bb61e01-e748-46c9-b0a2-1a6ed141538d;       ;    ;    ;       ;     ; -1 ;      ;    -1

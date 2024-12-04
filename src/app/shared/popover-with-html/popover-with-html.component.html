@@ -1,0 +1,51 @@
+<div #popoverTriggerer class="container" (click)="$event.stopPropagation()">
+  <div class="btn btn-light light" (click)="togglePopover($event)">
+    <input
+      class="h-0 w-0 absolute"
+      type="text"
+      (focusin)="showPopover()"
+      (focusout)="hidePopover($event)"
+    />
+    <ng-content type="button" select="[toggler]"></ng-content>
+  </div>
+
+  <div class="relative overflow-visible" *ngIf="isPopoverVisible">
+    <div
+      *ngIf="isPopoverVisible"
+      title="Dismissible popover"
+      class="popover-content bs-popover-bottom bg-white shadow-lg rounded mt-2"
+      style="position: absolute; z-index: 11"
+      [ngStyle]="computedStyle"
+    >
+      <div
+        class="popover-arrow"
+        style="position: absolute"
+        [ngStyle]="arrowComputedStyle"
+      ></div>
+      <div class="popover-header bg-gray-700 relative">
+        <button
+          tabindex="-1"
+          class="btn btn-danger rounded rounded-circle absolute"
+          [class]="styleClass"
+          (click)="togglePopover($event)"
+        >
+          <fa-icon [icon]="icons.x"></fa-icon>
+        </button>
+        <h5 class="text-center text-white">
+          <fa-icon [icon]="icons.pen"></fa-icon>
+        </h5>
+      </div>
+      <div class="popover-body">
+        <div class="p-3" (click)="resetEscapeCount($event)">
+          <ng-content select="[popo]"></ng-content>
+        </div>
+        <input
+          class="h-0 w-0 absolute"
+          type="text"
+          (focusin)="hidePopover($event)"
+          end-popover
+        />
+      </div>
+    </div>
+  </div>
+</div>

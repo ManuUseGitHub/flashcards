@@ -1,0 +1,70 @@
+:host {
+    display: block;
+    height: 100%;
+}
+
+.flip-card {
+    height: 50vw;
+    min-height:40vh;
+    perspective: 1000px;
+    p {
+        padding:0.5em;
+    }
+
+    .flip-card-front,
+    .flip-card-back {
+        background-color: #f9fafb;
+            color: #333;
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        backface-visibility: hidden;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        border-radius: 10px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        transition: transform 0.5s ease-in-out;
+    }
+
+
+    .flip-card-back {
+        transform: rotateY(180deg);
+    }
+
+    &.flipped .flip-card-front {
+        transform: rotateY(-180deg);
+    }
+
+    &.flipped .flip-card-back {
+        transform: rotateY(0deg);
+    }
+}
+
+.buttons {
+    display: flex;
+    /* Flexbox for buttons */
+    justify-content: center;
+    /* Horizontally center buttons */
+    margin-top: 20px;
+    /* Add space above the buttons */
+
+    .btn-nav {
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        background-color: #3b82f6;
+        color: white;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 24px;
+        margin: 0 10px;
+        /* Space between buttons */
+        transition: background-color 0.3s;
+
+        &:hover {
+            background-color: #2563eb;
+        }
+    }
+}

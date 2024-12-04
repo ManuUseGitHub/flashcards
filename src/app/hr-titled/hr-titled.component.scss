@@ -1,0 +1,25 @@
+.separator {
+    position: relative;
+    text-align: center;
+    margin: 20px 0;
+
+    hr {
+        border: none;
+        border-top: 1px solid #ccc;
+        margin: 0;
+    }
+
+    .separator-text {
+        position: absolute;
+
+        left: 0;
+        transform: translateY(-50%);
+        background-color: inherit;
+        padding: 0 10px;
+
+        color: lightgray;
+        font-size: 1rem;
+        pointer-events: none;
+
+    }
+}

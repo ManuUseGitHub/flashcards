@@ -1,0 +1,41 @@
+<div [formGroup]="filterForm" class="row">
+  <!-- Difficulty Style -->
+  <div class="col-lg-4 col-md-6 mb-4">
+    <app-form-selector-na
+      [text]="label"
+      [controlName]="controlName"
+      [options]="options"
+      [filterForm]="filterForm"
+      [compact]="true"
+    >
+    </app-form-selector-na>
+  </div>
+  <!-- Difficulty -->
+  <div class="col-2" [ngClass]="shouldHide(!isLowDisplayed())">
+    <app-form-selector-na
+      [text]="'Lower value'"
+      [controlName]="controlNameLow"
+      [options]="values"
+      [filterForm]="filterForm"
+      [compact]="true"
+    >
+    </app-form-selector-na>
+  </div>
+  <div
+    class="col-1 text-center"
+    [ngClass]="shouldHide(!(isLowDisplayed() && isHighDisplayed()))"
+  >
+    &
+  </div>
+  <div class="col-2" [ngClass]="shouldHide(!isHighDisplayed())">
+    <app-form-selector-na
+      [text]="'Upper value'"
+      [controlName]="controlNameHigh"
+      [options]="values"
+      [filterForm]="filterForm"
+      [compact]="true"
+    >
+    </app-form-selector-na>
+  </div>
+  <div class="col"></div>
+</div>

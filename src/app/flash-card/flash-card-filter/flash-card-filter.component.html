@@ -1,0 +1,275 @@
+<div class="h-full d-flex">
+  <div class="flip-card text-xl">
+    <form
+      [formGroup]="filterForm"
+      (ngSubmit)="onSubmit()"
+      class="flip-card-front justify-center items-center px-4 py-4"
+    >
+      <!-- From To Language -->
+      <div class="col-md-6">
+        <div class="flex gap-4">
+          <app-language-toggle
+            [filterForm]="filterForm"
+            [controlName]="'fromTo'"
+            (toggle)="toggleLanguage($event)"
+          >
+            <fa-icon [icon]="icons.flag"></fa-icon> guessing
+          </app-language-toggle>
+
+          <app-filtered-table-dialog-button
+            [composedList]="composedList"
+            [dataSource]="dataSource"
+            [filterForm]="filterForm"
+          >
+            <app-fa-cards class="h-4"></app-fa-cards>
+            {{ cardCount }} card(s)
+          </app-filtered-table-dialog-button>
+          <a class="btn btn-primary" href="/additions">Add cards</a>
+        </div>
+        <br />
+        <br />
+        <!-- Seed -->
+      </div>
+      <div class="col-xs-12">
+        <ul class="nav nav-tabs" id="myTab" role="tablist">
+          <li class="nav-item" role="presentation">
+            <button
+              class="nav-link active"
+              id="home-tab"
+              data-bs-toggle="tab"
+              data-bs-target="#home"
+              type="button"
+              role="tab"
+              aria-controls="home"
+              aria-selected="true"
+            >
+              Words and files
+              <span *ngIf="wordsAndFilesCount !== 0" class="badge bg-danger">{{
+                wordsAndFilesCount
+              }}</span>
+            </button>
+          </li>
+          <li class="nav-item" role="presentation">
+            <button
+              class="nav-link"
+              id="profile-tab"
+              data-bs-toggle="tab"
+              data-bs-target="#profile"
+              type="button"
+              role="tab"
+              aria-controls="profile"
+              aria-selected="false"
+            >
+              Course
+              <span *ngIf="courseSelectedCount !== 0" class="badge bg-danger">{{
+                courseSelectedCount
+              }}</span>
+            </button>
+          </li>
+          <li class="nav-item" role="presentation">
+            <button
+              class="nav-link"
+              id="contact-tab"
+              data-bs-toggle="tab"
+              data-bs-target="#contact"
+              type="button"
+              role="tab"
+              aria-controls="contact"
+              aria-selected="false"
+            >
+              Tags
+              <span *ngIf="tagsSelected !== 0" class="badge bg-danger">{{
+                tagsSelected
+              }}</span>
+            </button>
+          </li>
+        </ul>
+        <div class="tab-content bg-white" id="myTabContent">
+          <div
+            class="tab-pane fade show p-4 active"
+            id="home"
+            role="tabpanel"
+            aria-labelledby="home-tab"
+          >
+            <div class="row">
+              <app-hr-titled [text]="'Words kind'"></app-hr-titled>
+              <!-- Type -->
+              <div class="col-lg-4 col-md-6 mb-4">
+                <app-form-selector-na
+                  [text]="'Type'"
+                  [controlName]="'type'"
+                  [options]="types"
+                  [filterForm]="filterForm"
+                  [compact]="true"
+                >
+                </app-form-selector-na>
+              </div>
+
+              <!-- Article -->
+              <div class="col-lg-4 col-md-6 mb-4">
+                <app-form-selector-na
+                  [text]="'Article'"
+                  [controlName]="'article'"
+                  [options]="articles"
+                  [filterForm]="filterForm"
+                  [specifics]="[
+                    { value: '/', option: 'non-specified only' },
+                    { value: '!', option: 'specified only' }
+                  ]"
+                  [compact]="true"
+                >
+                </app-form-selector-na>
+              </div>
+
+              <!-- Containing -->
+              <div class="col-lg-4 col-md-6 mb-4">
+                <input
+                  type="text"
+                  id="containing"
+                  formControlName="containing"
+                  placeholder="containing n/a"
+                  class="form-control"
+                />
+              </div>
+              <app-hr-titled [text]="'Files'"></app-hr-titled>
+              <div class="col-sm-6">
+                <app-multiple-options-selector
+                  [selectedTags]="selectedMultiples['files']"
+                  [filterKey]="'files'"
+                  [intro]="'Skip files'"
+                  (selectionChange)="onToggleForMultiple('files', $event)"
+                ></app-multiple-options-selector>
+              </div>
+            </div>
+          </div>
+          <div
+            class="tab-pane fade p-4"
+            id="profile"
+            role="tabpanel"
+            aria-labelledby="profile-tab"
+          >
+            <div class="row">
+              <div class="col-sm-6">
+                <app-multiple-options-selector
+                  [selectedTags]="selectedMultiples['themes']"
+                  [filterKey]="'themes'"
+                  [intro]="'Themes'"
+                  (selectionChange)="onToggleForMultiple('themes', $event)"
+                ></app-multiple-options-selector>
+              </div>
+
+              <!-- Parts -->
+              <div class="col-sm-6">
+                <app-multiple-options-selector
+                  [selectedTags]="selectedMultiples['parts']"
+                  [filterKey]="'parts'"
+                  [intro]="'Parts'"
+                  (selectionChange)="onToggleForMultiple('parts', $event)"
+                ></app-multiple-options-selector>
+              </div>
+            </div>
+            <!-- Themes -->
+
+            <!-- Chapters -->
+            <div class="col-sm-6">
+              <app-multiple-options-selector
+                [selectedTags]="selectedMultiples['chapters']"
+                [filterKey]="'chapters'"
+                [intro]="'Chapters'"
+                (selectionChange)="onToggleForMultiple('chapters', $event)"
+              ></app-multiple-options-selector>
+            </div>
+          </div>
+          <div
+            class="tab-pane fade p-4"
+            id="contact"
+            role="tabpanel"
+            aria-labelledby="contact-tab"
+          >
+            <div class="row">
+              <div class="col-sm-12">
+                <app-multiple-options-selector
+                  [selectedTags]="selectedMultiples['tags']"
+                  [filterKey]="'tags'"
+                  [intro]="'Tags'"
+                  (selectionChange)="onToggleForMultiple('tags', $event)"
+                ></app-multiple-options-selector>
+              </div>
+
+              <app-hr-titled hidden [text]="'Difficulty'"></app-hr-titled>
+              <app-born-selector
+                hidden
+                [controlName]="'difficultyStyle'"
+                [options]="difficultyStyles"
+                [values]="difficulty"
+                [filterForm]="filterForm"
+                [controlNameLow]="'difficultyLow'"
+                [controlNameHigh]="'difficultyHigh'"
+                [label]="'Difficulty'"
+              ></app-born-selector>
+
+              <app-hr-titled hidden [text]="'randomization'"></app-hr-titled>
+              <div hidden class="col-ms-12">
+                <input
+                  type="text"
+                  id="seed"
+                  formControlName="seed"
+                  placeholder="RNG seed n/a"
+                  class="form-control"
+                />
+              </div>
+            </div>
+            <!-- Tags -->
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <app-hr-titled [text]="'Course'"></app-hr-titled>
+        <div class="col-xs-12 mb-4 d-flex justify-center">
+          <button class="btn btn-primary rounded" (click)="scanCategories()">
+            Scan categories
+          </button>
+        </div>
+
+        <!-- Apply Filters Button -->
+        <app-hr-titled [text]="'Configuration'"></app-hr-titled>
+        <div class="col-12 d-flex mb-4">
+          <div class="btn-group gap-1">
+            <button
+              type="submit"
+              [disabled]="this.saved"
+              [ngClass]="{ 'btn-danger': !saved }"
+              class="btn btn-primary rounded"
+            >
+              <fa-icon [icon]="icons.floppy"></fa-icon>
+            </button>
+            <app-file-upload
+              (onReadFileContent)="onFileRead($event)"
+            ></app-file-upload>
+            <app-json-data-download></app-json-data-download>
+            <div class="input-group preset">
+              <input
+                formControlName="preset"
+                name="preset"
+                placeholder="preset"
+                class="form-control"
+              />
+              <button
+                class="btn btn-primary"
+                (click)="$event.preventDefault(); savePreset()"
+              >
+                <fa-icon [icon]="icons.floppy"></fa-icon>
+              </button>
+            </div>
+            <button
+              class="btn btn-success rounded"
+              (click)="$event.preventDefault(); goToPractice()"
+            >
+              Practice <fa-icon [icon]="icons.dumbbell"></fa-icon>
+            </button>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>

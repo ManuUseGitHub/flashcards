@@ -1,0 +1,56 @@
+.button-group {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    &::hover{
+        .main-button{
+            background-color: white;
+        }
+    }
+}
+
+.main-button {
+    z-index: 10;
+    position: absolute;
+    transition: transform 0.3s ease;
+}
+
+.main-button,
+.side-button {
+    pointer-events: none;
+    /* Prevents the child buttons from triggering hover events */
+}
+
+.side-button {
+    width: 50px;
+    &.right {
+        float: right;
+        text-align: right;
+    }
+
+    &.left {
+        float: left;
+        text-align: left;
+    }
+}
+
+/* Pulse animation */
+@keyframes pulse {
+    0% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.1);
+        /* Slight scale up */
+    }
+
+    100% {
+        transform: scale(1);
+    }
+}
+
+/* Apply pulse animation when button is clicked */
+button.pulsing {
+    animation: infinite pulse 0.3s ease-in-out;
+}

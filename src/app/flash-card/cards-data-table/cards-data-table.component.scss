@@ -1,0 +1,31 @@
+.table-container {
+    padding: 20px;
+}
+
+table {
+    width: 100%;
+}
+
+th.mat-sort-header-sorted {
+    color: black;
+}
+
+tr[mat-row] {
+    transition: background .5s ease-in-out, color .5s ease-in-out;
+
+    &:hover {
+        cursor: pointer;
+        background-color: #ccc;
+    }
+}
+
+.mat-elevation-z8,
+.mat-mdc-elevation-specific.mat-elevation-z8 {
+    box-shadow: none
+}
+
+:host ::ng-deep {
+    .mat-mdc-paginator-container {
+        justify-content: center;
+    }
+}

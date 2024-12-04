@@ -1,0 +1,47 @@
+{
+  "fromTo": [
+    "fr",
+    "nl"
+  ],
+  "article": [
+    "de",
+    "het",
+    "my chapter",
+    "important one"
+  ],
+  "type": [
+    "irrégulier",
+    "régulier",
+    "préposition"
+  ],
+  "themes": [
+    "la famille",
+    "shopping,finance",
+    "shopping",
+    "petite expression",
+    "woordenschat",
+    "Luisteren",
+    "verbs,irrégulier"
+  ],
+  "parts": [
+    "Talen en landen"
+  ],
+  "chapters": [
+    "my chapter",
+    "important one"
+  ],
+  "tags": [
+    "begroeting",
+    "het alphabet",
+    "Provincies en steden in belgië",
+    "Provincies en steden in Nederland",
+    "Waar woon jij? Waar ligt dat?",
+    "Uit welk land kom jij?",
+    "Welke taal spreek jij?",
+    "Talen en landen"
+  ],
+  "difficultyStyle": "",
+  "difficulty": [
+    -1
+  ]
+}

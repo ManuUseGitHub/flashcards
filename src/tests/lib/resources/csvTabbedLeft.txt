@@ -1,0 +1,4 @@
+            dutch;    french;type;                                  id;article;part;tags;chapter;theme;         date;issuer;difficulty
+oma / grootmoeder;grand-mère;    ;74e8eaa1-1ad4-4c45-a608-92354804fe0a;       ;    ;    ;       ;     ;1729780136390;      ;        -1
+ opa / grootvader;grand-père;    ;d53db2fa-513a-420c-aac7-18c747fa0be6;       ;    ;    ;       ;     ;1729780136390;      ;        -1
+           moeder;      mère;    ;8451b4a5-1a09-4b75-bac3-2e4b3739750c;       ;    ;    ;       ;     ;1729780136390;      ;        -1

@@ -1,0 +1,11 @@
+dutch;french;type;article;tags;theme
+dokter;médecin;noun;de;medical, profession, healthcare;Healthcare
+leraar;enseignant;noun;de;education, teaching, profession;Education
+programmeur;programmeur;noun;de;IT, technology, software;Technology
+architect;architecte;noun;de;design, construction, planning;Construction
+kok;cuisinier;noun;de;cooking, food, profession;Culinary Arts
+piloot;pilote;noun;de;aviation, travel, profession;Transportation
+advocaat;avocat;noun;de;law, justice, profession;Legal
+verpleegkundige;infirmier;noun;de;medical, care, healthcare;Healthcare
+schilder;peintre;noun;de;art, creativity, profession;Arts
+verkoper;vendeur;noun;de;sales, commerce, retail;Commerce

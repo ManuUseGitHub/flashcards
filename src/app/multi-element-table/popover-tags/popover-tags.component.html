@@ -1,0 +1,23 @@
+<app-popover-with-html [maxWidth]="600" [formGroup]="row" (click)="$event.stopPropagation()">
+  <div toggler>
+    <div
+      [innerHtml]="
+        getTags(row, i) | wordClouded : undefined : '<a class=\'bull\'>•</a>'
+      "
+    ></div>
+  </div>
+  <div popo>
+    <app-multiple-options-selector
+      [selectedTags]="selectedMultiples[i]['tags']"
+      [filterKey]="'tags'"
+      [intro]="'Tags'"
+      [options]="tags"
+      (selectionChange)="onToggleForMultiple(i, $event)"
+      class="mb-4"
+    ></app-multiple-options-selector>
+    <hr />
+    <mat-form-field appearance="outline" class="w-full">
+      <input matInput formControlName="tags" placeholder="Tags" />
+    </mat-form-field>
+  </div>
+</app-popover-with-html>

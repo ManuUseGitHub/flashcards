@@ -1,0 +1,128 @@
+<!-- Modal -->
+<div
+  class="modal fade"
+  id="editCardModal"
+  tabindex="-1"
+  aria-labelledby="exampleModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-xl">
+    <form [formGroup]="filterForm" (ngSubmit)="$event.preventDefault(); onSubmit()">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+          <button
+            type="button"
+            class="btn-close"
+            data-bs-dismiss="modal"
+            aria-label="Close"
+          ></button>
+        </div>
+        <div class="modal-body">
+          <div class="p-6">
+            <div class="container mx-auto p-4">
+              <h2 class="text-lg font-semibold mb-4">Edit Entity</h2>
+
+              <div class="row">
+                <app-hr-titled [text]="'Definitions'"></app-hr-titled>
+                <div class="col-md-12 mb-3">
+                  <label class="form-label">French</label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    formControlName="french"
+                    placeholder="French"
+                  />
+                </div>
+                <div class="col-md-2 mb-3">
+                  <label class="form-label">Article</label>
+                  <input
+                    class="form-control"
+                    formControlName="article"
+                    rows="3"
+                    placeholder="Article"
+                  />
+                </div>
+
+                <div class="col-md-10 mb-3">
+                  <label class="form-label">Dutch</label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    formControlName="dutch"
+                    placeholder="Dutch"
+                  />
+                </div>
+
+                <app-hr-titled [text]="'Course'"></app-hr-titled>
+
+                <div class="col-md-4 mb-3">
+                  <label class="form-label">Theme</label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    formControlName="theme"
+                    placeholder="Theme"
+                  />
+                </div>
+
+                <div class="col-md-4 mb-3">
+                  <label class="form-label">Chapter</label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    formControlName="chapter"
+                    placeholder="Chapter"
+                  />
+                </div>
+
+                <div class="col-md-4 mb-3">
+                  <label class="form-label">Part</label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    formControlName="part"
+                    placeholder="Part"
+                  />
+                </div>
+                <app-hr-titled [text]="'Classification'"></app-hr-titled>
+                <div class="col-md-6 mb-3">
+                  <label class="form-label">Type</label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    formControlName="type"
+                    placeholder="Type"
+                  />
+                </div>
+
+                <div class="col-md-6 mb-3">
+                  <label class="form-label">Difficulty</label>
+                  <input
+                    type="number"
+                    class="form-control"
+                    formControlName="difficulty"
+                    min="1"
+                    max="10"
+                    placeholder="Difficulty"
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="modal-footer">
+          <button
+            type="button"
+            class="btn btn-secondary"
+            data-bs-dismiss="modal"
+          >
+            Close
+          </button>
+          <button type="submit" class="btn btn-primary">Save changes</button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>

@@ -1,0 +1,23 @@
+<div
+  class="btn-group w-full"
+  (mousemove)="reveal($event)"
+  (mouseleave)="leave()"
+  (click)="pickButton()"
+>
+  <button #left class="btn btn-small btn-danger side-button left">
+    <fa-icon [icon]="actions.left"></fa-icon>
+  </button>
+
+  <button
+    #center
+    class="btn btn-small main-button w-full rounded"
+    [ngClass]="{ 'btn-primary': !hovering, 'btn-light': hovering }"
+    [style.transform]="xSpreadTransformation"
+  >
+    {{ actions.center }}
+  </button>
+
+  <button #right class="btn btn-small btn-success side-button right">
+    <fa-icon [icon]="actions.right"></fa-icon>
+  </button>
+</div>
