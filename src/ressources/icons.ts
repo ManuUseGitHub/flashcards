@@ -23,6 +23,7 @@ import {
   faTrash,
   faX,
 } from '@fortawesome/free-solid-svg-icons';
+import { faGoogle } from '@fortawesome/free-brands-svg-icons'
 
 export const icons = {
   dumbbell: faDumbbell,
@@ -47,5 +48,6 @@ export const icons = {
   home: faHome,
   alRight: faAlignRight,
   alLeft: faAlignLeft,
-  alCenter : faAlignCenter
+  alCenter : faAlignCenter,
+  google: faGoogle
 };

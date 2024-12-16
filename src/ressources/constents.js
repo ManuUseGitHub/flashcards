@@ -16,4 +16,3 @@ const HEADERS = [
 module.exports = {
   HEADERS,
 };
-

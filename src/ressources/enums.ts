@@ -15,4 +15,5 @@ export enum EVENTS {
   ADDED_ROW,
   PATCH_CSV,
   DATASET_CHANGED,
+  DISCONNECT,
 }

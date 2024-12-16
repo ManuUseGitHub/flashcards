@@ -39,13 +39,9 @@ $flash-carder-nl-theme: mat.define-light-theme((color: (primary: $flash-carder-n
 body {
   //background: #282828 !important;
   background: rgb(48 64 107) !important;
-  height: 100vh;
+  min-height: 100vh;
 }
 
-html,
-body {
-  height: 100%;
-}
 
 body {
   margin: 0;

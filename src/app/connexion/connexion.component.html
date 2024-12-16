@@ -10,8 +10,13 @@
   ></div>
   <!-- Background image -->
 
-  <div *ngIf="isSigningIn; then signin; else signup"></div>
+  <div *ngIf="isAuthenticated; else connexion">
+    <app-profile-view></app-profile-view>
+  </div>
 
+  <ng-template #connexion>
+    <div *ngIf="isSigningIn; then signin; else signup"></div>
+  </ng-template>
   <ng-template #signin>
     <app-sign-in (toggleSign)="toggleSign($event)"></app-sign-in>
   </ng-template>

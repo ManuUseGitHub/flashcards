@@ -4,6 +4,7 @@ import { icons } from '../../ressources/icons';
 import { EventService } from '../shared/event.service';
 import { Router } from '@angular/router';
 import { EVENTS } from '../../ressources/enums';
+import { NestTestService } from '../flash-card/services/nest-test.service';
 
 @Component({
   selector: 'app-home',
@@ -19,6 +20,7 @@ export class HomeComponent implements OnInit {
   icons = icons;
 
   constructor(
+    private nest: NestTestService,
     private presets: FlashCardPresetService,
     private events: EventService,
     private _router: Router
@@ -27,6 +29,9 @@ export class HomeComponent implements OnInit {
   ngOnInit(): void {
     this.presets.getPresets().subscribe((data) => {
       this.presetList = data;
+    });
+    this.nest.great().subscribe((data) => {
+      console.log(data);
     });
     this.detectScreenSize();
   }

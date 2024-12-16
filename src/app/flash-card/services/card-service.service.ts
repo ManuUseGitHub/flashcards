@@ -8,6 +8,7 @@ import {
 } from '../../../ressources/httpHelper';
 import { CardAddition, CardEntry } from '../../../ressources/types';
 import { modifyCardDAO } from './daos';
+import { API_VERSION_ID_JSON_SERVER } from '../../../ressources/microsevicesNames';
 
 @Injectable({
   providedIn: 'root',
@@ -15,11 +16,13 @@ import { modifyCardDAO } from './daos';
 export class CardServiceService {
   options = standardOptions;
 
+  constructor(private http: HttpClient) {}
+
   getCards() {
     return (
       this.http
         //.get('assets/database/db.json', options)
-        .get(base('api/'))
+        .get(base(API_VERSION_ID_JSON_SERVER))
         .pipe(catchError(handleError))
     );
   }
@@ -27,7 +30,7 @@ export class CardServiceService {
   update(entity: CardEntry) {
     this.http
       //.get('assets/database/db.json', options)
-      .put(base('api/card'), entity as modifyCardDAO)
+      .put(base(API_VERSION_ID_JSON_SERVER + '/card'), entity as modifyCardDAO)
       .pipe(catchError(handleError))
       .subscribe((data) => {
         console.log(data);
@@ -37,12 +40,10 @@ export class CardServiceService {
   add(records: CardAddition) {
     this.http
       //.get('assets/database/db.json', options)
-      .post(base('api/card'), records as CardAddition)
+      .post(base(API_VERSION_ID_JSON_SERVER + '/card'), records as CardAddition)
       .pipe(catchError(handleError))
       .subscribe((data) => {
         console.log(data);
       });
   }
-
-  constructor(private http: HttpClient) {}
 }

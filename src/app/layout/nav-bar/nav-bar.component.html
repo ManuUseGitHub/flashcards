@@ -1,18 +1,47 @@
-<mat-toolbar>
-  <span>My App</span>
-  <span class="example-spacer"></span>
-  <button
-    mat-icon-button
-    class="example-icon favorite-icon"
-    aria-label="Example icon-button with heart icon"
+<mat-sidenav-container class="sidenav-container">
+  <mat-sidenav
+    [ngClass]="{ hidden: !(isHandset$ | async) }"
+    #drawer
+    class="sidenav"
+    fixedInViewgort="true"
+    [attr.role]="(isHandset$ | async) ? 'dialog' : 'navigation'"
+    [mode]="(isHandset$ | async) ? 'over' : 'side'"
+    [opened]="!(isHandset$ | async)"
   >
-    <app-fa-cards class="w-8 h-8"></app-fa-cards>
-  </button>
-  <button
-    mat-icon-button
-    class="example-icon"
-    aria-label="Example icon-button with share icon"
-  >
-    <fa-icon [icon]="icons.share"></fa-icon>
-  </button>
-</mat-toolbar>
+    <mat-toolbar>Menu</mat-toolbar>
+    <mat-nav-list (click)="drawer.toggle()">
+      <mat-list-item routerLink="/"
+        ><fa-icon [icon]="icons.home"></fa-icon> Home</mat-list-item
+      >
+      <mat-list-item routerLink="/portfolio">About me</mat-list-item>
+      <mat-list-item routerLink="/improve">Improve</mat-list-item>
+    </mat-nav-list>
+  </mat-sidenav>
+  <mat-sidenav-content #content>
+    <mat-toolbar class="flex" [ngClass]="{ 'not-sticky': !isSticking }">
+      <div class="flex-1" #toolbar>
+        <button
+          type="button"
+          aria-label="toggle sidenav"
+          mat-icon-button
+          (click)="drawer.toggle()"
+          *ngIf="isHandset$ | async"
+        >
+          <mat-icon aria-label="Side nav toggle icon">menu</mat-icon>
+        </button>
+        <div class="flex flex-1" *ngIf="!(isHandset$ | async)">
+          <button routerLink="/" class="uppercase">
+            L u n i v e r s d e m m
+          </button>
+          <div class="spacer flex-1"></div>
+          <div class="flex gap-4">
+            <button routerLink="/portfolio">About me</button>
+            <button routerLink="/improve">Improve</button>
+          </div>
+        </div>
+      </div>
+    </mat-toolbar>
+
+    <ng-content></ng-content>
+  </mat-sidenav-content>
+</mat-sidenav-container>

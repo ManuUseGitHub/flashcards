@@ -6,9 +6,10 @@ import {
   handleError,
   base,
 } from '../../../ressources/httpHelper';
+import { API_VERSION_ID_JSON_SERVER } from '../../../ressources/microsevicesNames';
 
 //const URL = 'assets/database/filters/characteristics.json';
-const URL = base('api/filters');
+const URL = base(API_VERSION_ID_JSON_SERVER + '/filters');
 
 @Injectable({
   providedIn: 'root',

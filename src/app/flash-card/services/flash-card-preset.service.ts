@@ -7,8 +7,9 @@ import {
   base,
 } from '../../../ressources/httpHelper';
 import { mapPreset } from '../../../ressources/mapper';
+import { API_VERSION_ID_JSON_SERVER } from '../../../ressources/microsevicesNames';
 
-const URL = base('api/presets/');
+const URL = base(API_VERSION_ID_JSON_SERVER + '/presets/');
 
 @Injectable({
   providedIn: 'root',

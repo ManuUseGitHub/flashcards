@@ -19,6 +19,9 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { DynamicDialogComponent } from './flnl-modal/dynamic-dialog.component';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatToolbarModule } from '@angular/material/toolbar';
+import { MatSidenavModule } from '@angular/material/sidenav';
+import { MatIconModule } from '@angular/material/icon';
+import { MatListModule } from '@angular/material/list';
 import { CardsComponent } from './icons/cards.component';
 import { CsvEditableLinesPipe } from './pipes/csv-editable-lines.pipe';
 import { AlSlashComponent } from './icons/alSlash.component';
@@ -51,10 +54,16 @@ import { AlSlashComponent } from './icons/alSlash.component';
     ReactiveFormsModule,
     MatProgressBarModule,
     MatToolbarModule,
+    MatSidenavModule,
+    MatListModule,
+    MatIconModule,
   ],
   exports: [
+    MatIconModule,
     MatToolbarModule,
+    MatSidenavModule,
     MatCheckboxModule,
+    MatListModule,
     MatProgressBarModule,
     AutoCompleteComponent,
     FileUploadComponent,
@@ -67,7 +76,7 @@ import { AlSlashComponent } from './icons/alSlash.component';
     FlnlModalComponent,
     DynamicDialogComponent,
     CardsComponent,
-    AlSlashComponent
+    AlSlashComponent,
   ],
 })
 export class SharedModule {}

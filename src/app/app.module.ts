@@ -11,9 +11,21 @@ import { HttpClientModule } from '@angular/common/http';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { SharedModule } from './shared/shared.module';
 import { NavBarComponent } from './layout/nav-bar/nav-bar.component';
+import { ConnexionComponent } from './connexion/connexion.component';
+import { SignUpComponent } from './connexion/sign-up/sign-up.component';
+import { SignInComponent } from './connexion/sign-in/sign-in.component';
+import { ProfileViewComponent } from './connexion/profile-view/profile-view.component';
 
 @NgModule({
-  declarations: [AppComponent, HomeComponent, NavBarComponent],
+  declarations: [
+    AppComponent,
+    HomeComponent,
+    NavBarComponent,
+    ConnexionComponent,
+    SignUpComponent,
+    SignInComponent,
+    ProfileViewComponent,
+  ],
   imports: [
     routes,
     HttpClientModule,
