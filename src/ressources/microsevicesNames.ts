@@ -1,2 +1,2 @@
-export const API_VERSION_ID_JSON_SERVER = 'json/V1';
-export const API_VERSION_ID_ORM = 'prisma/V1';
+export const API_VERSION_ID_JSON_SERVER = '6a736f6e2f5631';
+export const API_VERSION_ID_ORM = '707273696d612f5631';

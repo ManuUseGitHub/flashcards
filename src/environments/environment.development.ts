@@ -10,5 +10,5 @@ export const environment = {
     messagingSenderId: '511584615229',
     appId: '1:511584615229:web:faa10a965740ec9f52e354',
   },
-  accessToken: '5Y3XnGJf@tGjaSW*ztj6',
+  accessToken: '8oUryN5c8RtDmp2JlBuSL6WIYQ4Zcp2PKLg1D7FcBYjTJIq8BO',
 };

@@ -3,16 +3,10 @@ import { isDevMode } from '@angular/core';
 import { throwError } from 'rxjs';
 import { environment } from '../environments/environment';
 
-const SUBDOMAIN = 'improve';
-
 console.log('it is mode debug :' + isDevMode());
 const base = (url: string, isApiCall: boolean = true) => {
   console.log(url);
-  return (
-    (isDevMode()
-      ? ''
-      : `https://${isApiCall ? '' : SUBDOMAIN + '.'}luniversdemm.store/`) + url
-  );
+  return (isDevMode() ? '' : `https://api.luniversdemm.store/`) + url;
 };
 
 const handleError = (error: any) => {
