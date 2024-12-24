@@ -5,6 +5,7 @@ import { EventService } from '../shared/event.service';
 import { Router } from '@angular/router';
 import { EVENTS } from '../../ressources/enums';
 import { NestTestService } from '../flash-card/services/nest-test.service';
+const characteristics = require('../../assets/database/filters/characteristics.json');
 
 @Component({
   selector: 'app-home',
@@ -30,7 +31,8 @@ export class HomeComponent implements OnInit {
     this.presets.getPresets().subscribe((data) => {
       this.presetList = data;
     });
-    this.nest.great().subscribe((data) => {
+
+    this.nest.registerLovs(characteristics).subscribe((data) => {
       console.log(data);
     });
     this.detectScreenSize();

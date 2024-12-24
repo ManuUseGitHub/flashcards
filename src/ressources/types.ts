@@ -73,6 +73,8 @@ export type Filter = {
   difficulty: { value: number; tooltypeText: string };
 };
 
+export type LOVs = { [x: string]: any[] };
+
 export type EffectiveFilters = {
   files: string[];
   fromTo?: string;

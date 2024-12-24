@@ -39,9 +39,9 @@
     "Uit welk land kom jij?",
     "Welke taal spreek jij?",
     "Talen en landen"
-  ],
-  "difficultyStyle": "",
-  "difficulty": [
+  ],"difficulty": [
     -1
-  ]
+  ],
+  "difficultyStyle": ""
+  
 }
