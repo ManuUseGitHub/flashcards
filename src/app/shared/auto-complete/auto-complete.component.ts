@@ -1,6 +1,5 @@
 import {
   Component,
-  ElementRef,
   Input,
   OnDestroy,
   OnInit,
@@ -15,7 +14,6 @@ import {
   MatAutocomplete,
   MatAutocompleteTrigger,
 } from '@angular/material/autocomplete';
-import { FieldEscapeCloser } from '../filedEscapCloser';
 
 @Component({
   selector: 'app-auto-complete',

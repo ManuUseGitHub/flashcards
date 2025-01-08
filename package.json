@@ -4,8 +4,8 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve --configuration production",
-    "staging": "ng build --configuration staging",
-    "dev": "ng serve --port 4201 --configuration development",
+    "start:staging": "ng build --configuration staging",
+    "start:dev": "ng serve --port 4201 --configuration development",
     "build:dev": "ng build --configuration development",
     "build": "ng build --configuration production",
     "watch": "ng build --watch --configuration development",
@@ -65,5 +65,8 @@
     "postcss": "^8.4.47",
     "tailwindcss": "^3.4.14",
     "typescript": "~5.4.2"
+  },
+  "overrides": {
+    "date-fns": "2.x"
   }
 }

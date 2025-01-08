@@ -1,40 +1,88 @@
-import { Component, EventEmitter, Output } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { icons } from '../../../ressources/icons';
 import { environment } from '../../../environments/environment';
 import { initializeApp } from 'firebase/app';
-import { Auth, getAuth, GoogleAuthProvider, onAuthStateChanged, signInWithPopup } from 'firebase/auth';
+import {
+  getAuth,
+  GoogleAuthProvider,
+  onAuthStateChanged,
+  signInWithEmailAndPassword,
+  signInWithPopup,
+} from 'firebase/auth';
+import { FormBuilder, FormGroup } from '@angular/forms';
+import { ConnexionService } from '../connexion.service';
+import { mapSyncUser } from '../../mappers/userMappers';
+import { removeNull } from '../../mappers/commonFieldFilter';
+import { SyncUser } from '../../DTOs/syncUser';
+import { ProfileUSer } from '../../DTOs/profileUser';
 
 @Component({
   selector: 'app-sign-in',
   templateUrl: './sign-in.component.html',
   styleUrl: './sign-in.component.scss',
 })
-export class SignInComponent {
-  icons = icons;
+export class SignInComponent implements OnInit {
   @Output() toggleSign = new EventEmitter();
-  
+  icons = icons;
+
+  authForm!: FormGroup;
+
+  constructor(private fg: FormBuilder, private connexion: ConnexionService) {
+    const userSession = sessionStorage.getItem('user');
+    if (!userSession) {
+      initializeApp(environment.firebaseConfig);
+      const auth = getAuth();
+      onAuthStateChanged(auth, (user) => {
+        if (user) {
+          connexion.getUser(user.uid).subscribe((data) => {
+            const userFromFirebase = mapSyncUser(user);
+            const userFetched = removeNull(data as ProfileUSer);
+            const syncedUser = Object.assign(userFromFirebase, userFetched);
+            sessionStorage.setItem('user', JSON.stringify(syncedUser));
+          });
+        } else {
+          // User is signed out
+          // ...
+        }
+      });
+    }
+  }
+
+  ngOnInit(): void {
+    this.authForm = this.fg.group({
+      email: [],
+      password: [],
+    });
+  }
+
   toggleSignIn() {
     this.toggleSign.emit();
   }
 
-  private user: any;
-
-  constructor() {
-    initializeApp(environment.firebaseConfig);
+  signInWithEmailPassword() {
     const auth = getAuth();
-    onAuthStateChanged(auth, (user) => {
-      if (user) {
-        console.log(user);
-      } else {
-        // User is signed out
+    const { email, password } = this.authForm.getRawValue();
+
+    signInWithEmailAndPassword(auth, email, password!)
+      .then((userCredential) => {
+        // Signed in
+        const user = userCredential.user;
         // ...
-      }
-    });
+        this.connexion.sync(user).subscribe((data) => {
+          console.log('data:', data);
+        });
+      })
+      .catch((error) => {
+        const errorCode = error.code;
+        const errorMessage = error.message;
+        console.log(errorMessage);
+      });
   }
 
   signinViaGoolg() {
     initializeApp(environment.firebaseConfig);
     const provider = new GoogleAuthProvider();
+    provider.setCustomParameters({});
     const auth = getAuth();
     signInWithPopup(auth, provider)
       .then((result) => {
@@ -45,7 +93,11 @@ export class SignInComponent {
         const user = result.user;
         // IdP data available using getAdditionalUserInfo(result)
         // ...
-        console.log({ token, user, credential });
+
+        this.connexion.sync(user).subscribe((data) => {
+          console.log('data:', data);
+          location.reload();
+        });
       })
       .catch((error) => {
         // Handle Errors here.

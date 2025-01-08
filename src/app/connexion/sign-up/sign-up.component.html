@@ -1,4 +1,4 @@
-<div class="container">
+<div class="container" [formGroup]="filterForm">
   <div class="row">
     <div
       class="card mx-auto px-md-5 col-xs-12 col-lg-6 shadow-5-strong bg-body-tertiary"
@@ -9,27 +9,13 @@
           <h2 class="fw-bold mb-5">Create your account</h2>
           <form>
             <!-- 2 column grid layout with text inputs for the first and last names -->
-            <div class="row">
-              <div class="col-md-6 mb-4">
-                <div data-mdb-input-init class="form-outline">
-                  <input
-                    placeholder="First name"
-                    type="text"
-                    id="form3Example1"
-                    class="form-control"
-                  />
-                </div>
-              </div>
-              <div class="col-md-6 mb-4">
-                <div data-mdb-input-init class="form-outline">
-                  <input
-                    placeholder="Last name"
-                    type="text"
-                    id="form3Example2"
-                    class="form-control"
-                  />
-                </div>
-              </div>
+            <div data-mdb-input-init class="form-outline mb-4">
+              <input
+                placeholder="Display name"
+                type="text"
+                class="form-control"
+                formControlName="displayName"
+              />
             </div>
 
             <!-- Email input -->
@@ -37,8 +23,8 @@
               <input
                 placeholder="Email address"
                 type="email"
-                id="form3Example3"
                 class="form-control"
+                [formControlName]="'email'"
               />
             </div>
 
@@ -49,6 +35,7 @@
                 type="password"
                 id="form3Example4"
                 class="form-control"
+                [formControlName]="'password'"
               />
             </div>
 
@@ -60,6 +47,7 @@
                     data-mdb-button-init
                     data-mdb-ripple-init
                     class="btn btn-primary p-3"
+                    (click)="signUpWithEmailPassword(); $event.preventDefault()"
                   >
                     Sign up
                   </button>
@@ -76,7 +64,12 @@
                   >
                     <fa-icon [icon]="icons.google"></fa-icon>
                   </button>
-                  <button class="btn btn-link" (click)="toggleSignIn(); $event.preventDefault();">your account</button>
+                  <button
+                    class="btn btn-link"
+                    (click)="toggleSignIn(); $event.preventDefault()"
+                  >
+                    your account
+                  </button>
                 </div>
               </div>
             </div>

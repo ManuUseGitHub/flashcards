@@ -1,4 +1,4 @@
-<div class="container">
+<div class="container" [formGroup]="profileForm">
   <div class="row d-flex justify-content-center align-items-center h-100">
     <div
       *ngIf="user"
@@ -15,30 +15,105 @@
             "
           >
             <img
-              [src]="user.photoURL"
+              [src]="
+                user.photoUrl
+                  ? user.photoUrl
+                  : './assets/anonym-profile-picture.jpeg'
+              "
               alt="Avatar"
               class="img-fluid my-5 rounded-circle"
-              style="width: 80px"
+              style="width: 80px; border: 2px solid white"
             />
             <h5>{{ user.displayName }}</h5>
-            <p>Web Designer</p>
-            <i class="far fa-edit mb-5"></i>
-            <button class="btn btn-link text-white">
-              <fa-icon [icon]="icons.pen"></fa-icon>
-            </button>
+            <div class="container bg-gray-500">
+              <h3>=Nobless=</h3>
+              <p>
+                {{ userTitle }}
+                <button class="btn btn-link text-white">
+                  <fa-icon [icon]="icons.pen"></fa-icon>
+                </button>
+              </p>
+            </div>
+
+            <div class="btn-group btn" role="group">
+              <div class="dropdown btn-group">
+                <button
+                  class="btn btn-primary"
+                  type="button"
+                  data-bs-toggle="dropdown"
+                  aria-expanded="false"
+                >
+                  <fa-icon [icon]="icons.gear"></fa-icon>
+                </button>
+                <ul class="dropdown-menu">
+                  <li *ngFor="let title of titleStyles" [value]="title">
+                    <a class="dropdown-item" (click)="generateTitle(title)">{{
+                      title
+                    }}</a>
+                  </li>
+                </ul>
+              </div>
+              <button class="btn btn-primary" (click)="generateTitle('')">
+                generate
+              </button>
+            </div>
           </div>
           <div class="col-md-8">
             <div class="card-body p-4">
               <h6>Information</h6>
               <hr class="mt-0 mb-4" />
-              <div class="row pt-1">
-                <div class="col-6 mb-3">
-                  <h6>Email</h6>
-                  <p class="text-muted">info at example.com</p>
+              <div class="row pt-1 text-left">
+                <div class="col-12 mb-3">
+                  <h6 class="inline-block">
+                    <fa-icon [icon]="icons.mail"></fa-icon>
+                  </h6>
+                  &nbsp;
+                  <p class="text-muted inline" style="filter: blur(3px)">
+                    {{ user.email }}
+                  </p>
+                  <hr />
                 </div>
-                <div class="col-6 mb-3">
-                  <h6>Phone</h6>
-                  <p class="text-muted">123 456 789</p>
+                <div class="col-1 mb-3">
+                  <h6 class="inline-block">
+                    <fa-icon [icon]="icons.cake"></fa-icon>
+                  </h6>
+                </div>
+                <div class="col-11 mb-3">
+                  <p
+                    class="text-muted inline-block alert alert-primary"
+                    *ngIf="user.dateOfBirth; else noDate"
+                  >
+                    You were born on {{ user.dateOfBirth | date }} ... Awesome
+                    !!
+                  </p>
+                  <ng-template #noDate>
+                    <p class="text-muted inline-block alert alert-warning">
+                      No birthday huh ?
+                      <fa-icon [icon]="icons.brokeHeart"></fa-icon>
+                    </p>
+                  </ng-template>
+                </div>
+                <div class="col-1 mb-3">
+                  <h6 class="inline-block">
+                    <fa-icon [icon]="icons.flag"></fa-icon>
+                  </h6>
+                </div>
+                <div class="col-11 mb-3">
+                  <p
+                    class="text-muted inline-block alert"
+                    [ngClass]="{
+                      'alert-primary': !joinedMesage,
+                      'alert-success': joinedMesage
+                    }"
+                  >
+                    You joined on {{ user.dateJoin | date }} ...
+                    <span *ngIf="joinedMesage"
+                      >{{ joinedMesage }}&nbsp;<fa-icon
+                        class="text-red-500"
+                        [icon]="icons.heart"
+                      ></fa-icon
+                    ></span>
+                  </p>
                 </div>
               </div>
               <h6>Language books</h6>

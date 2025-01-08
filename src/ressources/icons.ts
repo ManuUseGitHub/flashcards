@@ -6,16 +6,20 @@ import {
   faArrowRightArrowLeft,
   faArrowRotateForward,
   faArrowUp,
+  faCake,
   faCheck,
   faChevronRight,
   faCircle,
   faCircleCheck,
   faClock,
   faDumbbell,
+  faEnvelope,
   faFile,
   faFlag,
   faFloppyDisk,
+  faGear,
   faHeart,
+  faHeartBroken,
   faHome,
   faPen,
   faPlus,
@@ -23,7 +27,7 @@ import {
   faTrash,
   faX,
 } from '@fortawesome/free-solid-svg-icons';
-import { faGoogle } from '@fortawesome/free-brands-svg-icons'
+import { faGoogle } from '@fortawesome/free-brands-svg-icons';
 
 export const icons = {
   dumbbell: faDumbbell,
@@ -48,6 +52,10 @@ export const icons = {
   home: faHome,
   alRight: faAlignRight,
   alLeft: faAlignLeft,
-  alCenter : faAlignCenter,
-  google: faGoogle
+  alCenter: faAlignCenter,
+  google: faGoogle,
+  cake: faCake,
+  mail: faEnvelope,
+  brokeHeart: faHeartBroken,
+  gear: faGear,
 };

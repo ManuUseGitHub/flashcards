@@ -1,4 +1,4 @@
-<div class="container">
+<div class="container" [formGroup]="authForm">
   <div class="row">
     <div
       class="card mx-auto px-md-5 col-xs-12 col-lg-6 shadow-5-strong bg-body-tertiary"
@@ -11,20 +11,24 @@
             <!-- Email input -->
             <div data-mdb-input-init class="form-outline mb-4">
               <input
+                name="email"
                 placeholder="Email address"
                 type="email"
-                id="form3Example3"
+                id="email"
                 class="form-control"
+                formControlName="email"
               />
             </div>
 
             <!-- Password input -->
             <div data-mdb-input-init class="form-outline mb-4">
               <input
+                name="password"
                 placeholder="Password"
                 type="password"
-                id="form3Example4"
+                id="password"
                 class="form-control"
+                formControlName="password"
               />
             </div>
 
@@ -36,7 +40,7 @@
                     data-mdb-button-init
                     data-mdb-ripple-init
                     class="btn btn-primary p-3"
-                    (click)="signinViaGoolg(); $event.preventDefault()"
+                    (click)="signInWithEmailPassword(); $event.preventDefault()"
                   >
                     Connect
                   </button>
@@ -51,6 +55,7 @@
                   data-mdb-button-init
                   data-mdb-ripple-init
                   class="btn btn-primary rounded-circle"
+                  (click)="signinViaGoolg(); $event.preventDefault()"
                 >
                   <fa-icon [icon]="icons.google"></fa-icon>
                 </button>
