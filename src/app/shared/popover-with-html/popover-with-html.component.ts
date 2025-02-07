@@ -3,7 +3,6 @@ import {
   Component,
   ElementRef,
   Input,
-  OnDestroy,
   OnInit,
   ViewChild,
   ViewEncapsulation,
@@ -11,8 +10,7 @@ import {
 import { EventService } from '../event.service';
 import { EVENTS } from '../../../ressources/enums';
 import { icons } from '../../../ressources/icons';
-import { Subscription } from 'rxjs';
-import { FieldEscapeCloser } from '../filedEscapCloser';
+import { SubscriberComponent } from '../subscriber/subscriber.component';
 
 @Component({
   selector: 'app-popover-with-html',
@@ -22,9 +20,9 @@ import { FieldEscapeCloser } from '../filedEscapCloser';
   encapsulation: ViewEncapsulation.None,
 })
 export class PopoverWithHTMLComponent
-  implements OnInit, AfterViewInit, OnDestroy
+  extends SubscriberComponent
+  implements OnInit, AfterViewInit
 {
-  services: Subscription[] = [];
   @Input()
   maxWidth: number = 200;
 
@@ -72,7 +70,9 @@ export class PopoverWithHTMLComponent
     return style;
   }
 
-  constructor(private events: EventService) {}
+  constructor(private events: EventService) {
+    super();
+  }
   ngAfterViewInit(): void {
     const hasPass2Third =
       this.popoverTriggerer.nativeElement.getBoundingClientRect().x >
@@ -88,31 +88,31 @@ export class PopoverWithHTMLComponent
   }
 
   ngOnInit() {
-    this.services.push(
+    this.subscribe(
       ...[
         this.events.listen(
-          EVENTS.TAB_DIRECTION.toString(),
+          EVENTS.TAB_DIRECTION,
           (payload: { event: any; canClose: boolean }) => {
             const { event } = payload;
             this._focusDirection = event.shiftKey ? 'left' : 'right';
           }
         ),
         this.events.listen(
-          EVENTS.LOST_FOCUS.toString(),
+          EVENTS.LOST_FOCUS,
           (event: { event: any; canClose: boolean }) => {
             if (!this.isMouseIn) {
               this.hidePopover(event, event.canClose);
             }
           }
         ),
-        this.events.listen(EVENTS.CLOSE_OTHER_POPOVERS.toString(), () => {
+        this.events.listen(EVENTS.CLOSE_OTHER_POPOVERS, () => {
           this.isPopoverVisible = false;
         }),
       ]
     );
   }
   resetEscapeCount(event: any) {
-    this.events.broadcast(EVENTS.RESET_ESCAPER.toString(), event);
+    this.events.broadcast(EVENTS.RESET_ESCAPER, event);
   }
 
   togglePopover(event: any) {
@@ -120,8 +120,8 @@ export class PopoverWithHTMLComponent
       {
         const state = this.isPopoverVisible;
         if (!state) {
-          this.events.broadcast(EVENTS.CLOSE_OTHER_POPOVERS.toString(), event);
-          this.events.broadcast(EVENTS.RESET_ESCAPER.toString(), event);
+          this.events.broadcast(EVENTS.CLOSE_OTHER_POPOVERS, event);
+          this.events.broadcast(EVENTS.RESET_ESCAPER, event);
         }
         this.isPopoverVisible = !this.isPopoverVisible;
       }
@@ -141,17 +141,11 @@ export class PopoverWithHTMLComponent
     }
     if (endReached) {
       this.isPopoverVisible = false;
-      this.events.broadcast(EVENTS.FOCUS_NEXT.toString(), event.target);
+      this.events.broadcast(EVENTS.FOCUS_NEXT, event.target);
     }
   }
 
   showPopover() {
     this.isPopoverVisible = true;
-  }
-
-  ngOnDestroy() {
-    this.services.forEach((x) => {
-      x.unsubscribe();
-    });
   }
 }

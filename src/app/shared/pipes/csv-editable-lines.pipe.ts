@@ -2,7 +2,8 @@ import { Pipe, PipeTransform } from '@angular/core';
 import { replaceSemicolon } from '../../../lib/strings';
 
 @Pipe({
-  name: 'csvEditableLines',
+    name: 'csvEditableLines',
+    standalone: false
 })
 export class CsvEditableLinesPipe implements PipeTransform {
   transform(

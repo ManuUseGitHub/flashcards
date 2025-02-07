@@ -1,4 +1,4 @@
-<div class="mat-elevation-z8">
+<form [formGroup]="tableForm">
   <table
     mat-table
     [dataSource]="dataSource"
@@ -6,15 +6,86 @@
     (matSortChange)="announceSortChange($event)"
     class="mat-elevation-z8"
   >
+    <!-- Item Description Column -->
+    <ng-container matColumnDef="all-th">
+      <th mat-header-cell *matHeaderCellDef="let j = index"></th>
+    </ng-container>
+    <!-- Item Description Column -->
+    <ng-container matColumnDef="dutch-th">
+      <th mat-header-cell *matHeaderCellDef>
+        {{ getHeaderCheckName("dutch") }}
+      </th>
+    </ng-container>
+    <!-- Item Description Column -->
+    <ng-container matColumnDef="french-th">
+      <th mat-header-cell *matHeaderCellDef>
+        {{ getHeaderCheckName("french") }}
+      </th>
+    </ng-container>
+    <!-- Item Description Column -->
+    <ng-container matColumnDef="type-th">
+      <th mat-header-cell *matHeaderCellDef>
+        {{ getHeaderCheckName("type") }}
+      </th>
+    </ng-container>
+    <!-- Item Description Column -->
+    <ng-container matColumnDef="course-th">
+      <th mat-header-cell *matHeaderCellDef>{{ getHeaderCheckName("course") }}</th>
+    </ng-container>
+    <!-- Item Description Column -->
+    <ng-container matColumnDef="tags-th">
+      <th mat-header-cell *matHeaderCellDef>{{ getHeaderCheckName("tags") }}</th>
+    </ng-container>
+    <!-- Item Description Column -->
+    <ng-container matColumnDef="referal-th">
+      <th mat-header-cell *matHeaderCellDef>{{ getHeaderCheckName("referal") }}</th>
+    </ng-container>
+    <!-- Item Description Column -->
+    <ng-container matColumnDef="difficulty-th">
+      <th mat-header-cell *matHeaderCellDef>{{ getHeaderCheckName("difficulty") }}</th>
+    </ng-container>
+    <!-- Item Description Column -->
+    <ng-container matColumnDef="flags-th">
+      <th mat-header-cell *matHeaderCellDef></th>
+    </ng-container>
+    <!-- flags Column -->
+    <ng-container matColumnDef="flags">
+      <th mat-header-cell mat-sort-header *matHeaderCellDef>
+        <fa-icon [icon]="icons.flag"></fa-icon>
+      </th>
+      <td mat-cell *matCellDef="let element">
+        <fa-icon
+          *ngIf="element.unverified"
+          [icon]="icons.attention"
+          [ngClass]="flagClass(element, 'unverified')"
+        ></fa-icon>
+      </td>
+      <td mat-footer-cell *matFooterCellDef hidden></td> </ng-container
+    ><ng-container matColumnDef="all">
+      <th mat-header-cell *matHeaderCellDef>
+        <mat-checkbox
+          formControlName="all"
+          (change)="toggleAllRows($event)"
+        ></mat-checkbox>
+      </th>
+      <td mat-cell *matCellDef="let row; let i = index">
+        <mat-checkbox
+          [formControl]="getCastedRow(i)"
+          (change)="saveValue($event, i)"
+        ></mat-checkbox>
+        <fa-icon [icon]="icons.pen" (click)="onRowClick(row)"></fa-icon>
+      </td>
+      <td mat-footer-cell *matFooterCellDef hidden></td>
+    </ng-container>
     <!-- Dutch Column -->
     <ng-container matColumnDef="dutch">
       <th mat-header-cell mat-sort-header *matHeaderCellDef>Dutch</th>
-      <td mat-cell *matCellDef="let element">
-        {{ element.article }}
+      <td mat-cell *matCellDef="let element" [ngClass]="colorStyle(element)">
         {{ element.dutch }}
       </td>
-      <td mat-footer-cell *matFooterCellDef colspan="7">
+      <td mat-footer-cell *matFooterCellDef colspan="8">
         <mat-paginator
+          (page)="onPageChanged($event)"
           [pageSizeOptions]="[20, 50, 100]"
           showFirstLastButtons
         ></mat-paginator>
@@ -81,16 +152,19 @@
       </td>
       <td mat-footer-cell *matFooterCellDef hidden></td>
     </ng-container>
-
     <!-- Header and Row Declarations -->
+    <tr
+      mat-header-row
+      *matHeaderRowDef="checkHeaders"
+      class="example-second-header-row"
+    ></tr>
     <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
     <tr
       mat-row
       data-bs-toggle="modal"
       data-bs-target="#editCardModal"
-      (click)="onRowClick(row)"
       *matRowDef="let row; columns: displayedColumns"
     ></tr>
     <tr mat-footer-row *matFooterRowDef="displayedColumns; sticky: true"></tr>
   </table>
-</div>
+</form>

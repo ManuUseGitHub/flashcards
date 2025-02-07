@@ -1,13 +1,12 @@
-import { Injectable,  } from '@angular/core';
-import { catchError } from 'rxjs';
+import { Injectable, inject } from '@angular/core';
+import { catchError, Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import {
   base,
   handleError,
   standardOptions,
 } from '../../../ressources/httpHelper';
-import { CardAddition, CardEntry } from '../../../ressources/types';
-import { modifyCardDAO } from './daos';
+import { CardAddition, CardEntry, CardModify } from '../../../ressources/types';
 import { API_VERSION_ID_JSON_SERVER } from '../../../ressources/microsevicesNames';
 
 const options = standardOptions;
@@ -16,9 +15,9 @@ const options = standardOptions;
   providedIn: 'root',
 })
 export class CardServiceService {
-  options = standardOptions;
+  private http = inject(HttpClient);
 
-  constructor(private http: HttpClient) {}
+  options = standardOptions;
 
   getCards() {
     return this.http
@@ -26,21 +25,14 @@ export class CardServiceService {
       .pipe(catchError(handleError));
   }
 
-  update(entity: CardEntry) {
-    this.http
-      .put(
-        base(API_VERSION_ID_JSON_SERVER + '/card'),
-        entity as modifyCardDAO,
-        options
-      )
-      .pipe(catchError(handleError))
-      .subscribe((data) => {
-        console.log(data);
-      });
+  update(entity: CardModify) {
+    return this.http
+      .put(base(API_VERSION_ID_JSON_SERVER + '/card'), entity, options)
+      .pipe(catchError(handleError));
   }
 
   add(records: CardAddition) {
-    this.http
+    return this.http
       .post(
         base(API_VERSION_ID_JSON_SERVER + '/card'),
         records as CardAddition,

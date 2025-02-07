@@ -4,11 +4,15 @@ import {
   ContentChild,
   inject,
   Input,
+  OnInit,
   TemplateRef,
 } from '@angular/core';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { DynamicDialogComponent } from './dynamic-dialog.component';
 import { generateKey, registerUser } from '../../../lib/mycrypto';
+import { EventService } from '../event.service';
+import { EVENTS } from '../../../ressources/enums';
+import { SubscriberComponent } from '../subscriber/subscriber.component';
 
 @Component({
   selector: 'app-flnl-modal',
@@ -16,11 +20,13 @@ import { generateKey, registerUser } from '../../../lib/mycrypto';
   styleUrl: './flnl-modal.component.scss',
   standalone: false,
 })
-export class FlnlModalComponent implements AfterViewInit {
+export class FlnlModalComponent
+  extends SubscriberComponent
+  implements AfterViewInit, OnInit
+{
   readonly dialog = inject(MatDialog);
 
-  @Input()
-  options: MatDialogConfig | undefined;
+  @Input() options: MatDialogConfig | undefined;
   @Input() data!: any;
   @Input() handler!: any;
 
@@ -28,10 +34,22 @@ export class FlnlModalComponent implements AfterViewInit {
   @ContentChild('body') bodyTemplate!: TemplateRef<any>;
   @ContentChild('actions') actionsTemplate!: TemplateRef<any>;
 
-  ngAfterViewInit() {
-    // Debug logs to ensure templates are captured
-    //this.openDialog();
+  constructor(private events: EventService) {
+    super();
+  }
+  ngOnInit(): void {
+    this.subscribe(
+      this.events.listen(EVENTS.OPEN_DIALOG, () => {
+        this.openDialog();
+        // Debug logs to ensure templates are captured
+      }),
+      this.events.listen(EVENTS.CLOSE_DIALOG, () => {
+        this.closeDialog(null);
+      })
+    );
+  }
 
+  ngAfterViewInit() {
     generateKey((key) => {
       registerUser(
         {
@@ -46,6 +64,7 @@ export class FlnlModalComponent implements AfterViewInit {
   }
 
   openDialog(): void {
+    
     this.dialog
       .open(DynamicDialogComponent, {
         data: {
@@ -53,6 +72,7 @@ export class FlnlModalComponent implements AfterViewInit {
           bodyTemplate: this.bodyTemplate,
           actionsTemplate: this.actionsTemplate,
         },
+        hasBackdrop: false, // Ensures backdrop is set
         panelClass: 'dynamic-modal',
         autoFocus: false,
         width: '100vw', // Ensure width and height match your fullscreen requirement
@@ -62,5 +82,7 @@ export class FlnlModalComponent implements AfterViewInit {
       .afterClosed()
       .subscribe(this.handler);
   }
-  closeDialog(event: any) {}
+  closeDialog(event: any) {
+    this.dialog.closeAll();
+  }
 }

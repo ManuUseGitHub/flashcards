@@ -1,12 +1,13 @@
-import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { Component, Inject, Input, OnInit } from '@angular/core';
 import { icons } from '../../ressources/icons';
-import { CardEntry } from '../../ressources/types';
+import { CardEntry, CardModify } from '../../ressources/types';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { EventService } from '../shared/event.service';
 import { EVENTS } from '../../ressources/enums';
 import { CardServiceService } from '../flash-card/services/card-service.service';
 import { modifyCardDAO } from '../flash-card/services/daos';
-import { Subscription } from 'rxjs';
+import { catchError, throwError } from 'rxjs';
+import { SubscriberComponent } from '../shared/subscriber/subscriber.component';
 
 @Component({
   selector: 'app-edit-entity',
@@ -14,16 +15,18 @@ import { Subscription } from 'rxjs';
   styleUrl: './edit-entity.component.scss',
   standalone: false,
 })
-export class EditEntityComponent implements OnInit, OnDestroy {
-  services: Subscription[] = [];
-
+export class EditEntityComponent extends SubscriberComponent implements OnInit {
+  @Input() entity?: CardEntry;
   filterForm!: FormGroup;
+  icons = icons;
 
   constructor(
-    private fb: FormBuilder,
+    @Inject(FormBuilder) private fb: FormBuilder,
     private events: EventService,
     private cardService: CardServiceService
-  ) {}
+  ) {
+    super();
+  }
   ngOnInit(): void {
     this.filterForm = this.fb.group({
       id: [null],
@@ -40,23 +43,35 @@ export class EditEntityComponent implements OnInit, OnDestroy {
       difficulty: [null],
     });
 
-    this.services.push(
-      this.events.listen(EVENTS.LOAD_CARD.toString(), (data) => {
+    this.subscribe(
+      this.events.listen(EVENTS.LOAD_CARD, (data) => {
         this.filterForm.patchValue(data);
+      }),
+      this.events.listen(EVENTS.SAVE_CARD, (data) => {
+        this.onSubmit();
+
+        this.events.broadcast(EVENTS.LOAD_CARD, null);
       })
     );
   }
-  @Input() entity?: CardEntry;
-
-  icons = icons;
-
   onSubmit() {
-    this.filterForm.patchValue({ date: new Date() });
-    this.cardService.update(this.filterForm.getRawValue());
-  }
-  ngOnDestroy() {
-    this.services.forEach((x) => {
-      x.unsubscribe();
-    });
+    const changedData = {
+      date: new Date(),
+      ...this.filterForm.getRawValue(),
+    };
+    this.filterForm.patchValue(changedData);
+    this.cardService
+      .update(changedData)
+      .pipe(
+        catchError((error: any) => {
+          return throwError(() => new Error('Something went wrong'));
+        })
+      )
+      .subscribe((response) => {
+        this.events.broadcast(EVENTS.SYNC_LOCAL_CARDS, {
+          unverified: true,
+          ...changedData,
+        });
+      });
   }
 }

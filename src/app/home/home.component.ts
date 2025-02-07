@@ -1,4 +1,4 @@
-import { Component, HostListener, OnInit } from '@angular/core';
+import { Component, HostListener, Inject, OnInit } from '@angular/core';
 import { FlashCardPresetService } from '../flash-card/services/flash-card-preset.service';
 import { icons } from '../../ressources/icons';
 import { EventService } from '../shared/event.service';
@@ -21,7 +21,7 @@ export class HomeComponent implements OnInit {
   constructor(
     private presets: FlashCardPresetService,
     private events: EventService,
-    private _router: Router
+    @Inject(Router) private _router: Router
   ) {}
 
   ngOnInit(): void {
@@ -51,7 +51,7 @@ export class HomeComponent implements OnInit {
   }
 
   loadPreset(preset: any) {
-    this.events.broadcast(EVENTS.LOAD_PRESET.toString(), {
+    this.events.broadcast(EVENTS.LOAD_PRESET, {
       ...preset.preset,
       preset: preset.name,
     });
@@ -68,7 +68,7 @@ export class HomeComponent implements OnInit {
     }
   }
   launchTrainingSession() {
-    this.events.broadcast(EVENTS.SAVE_FILTERS.toString(), null);
+    this.events.broadcast(EVENTS.SAVE_FILTERS, null);
     this._router.navigateByUrl('/cards');
   }
   delete(id: any) {

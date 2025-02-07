@@ -5,10 +5,10 @@ export class FieldEscapeCloser {
   escapeCount: number;
   constructor(private events: EventService) {
     this.escapeCount = 0;
-    this.events.listen(EVENTS.RESET_ESCAPER.toString(), (event) => {
-      this.escapeCount = /A|DIV/.test(event.target.tagName) ? 1:0;
+    this.events.listen(EVENTS.RESET_ESCAPER, (event) => {
+      this.escapeCount = /A|DIV/.test(event.target.tagName) ? 1 : 0;
     });
-    this.events.listen(EVENTS.ESCAPED.toString(), (event: any) => {
+    this.events.listen(EVENTS.ESCAPED, (event: any) => {
       this.escapeCount = 1;
       event.target.blur();
     });
@@ -17,7 +17,7 @@ export class FieldEscapeCloser {
   handleKey(event: any) {
     event.target.blur();
     if (event.key == 'Escape' && 2 <= ++this.escapeCount) {
-      this.events.broadcast(EVENTS.LOST_FOCUS.toString(), { canClose: true });
+      this.events.broadcast(EVENTS.LOST_FOCUS, { canClose: true });
     }
   }
 }

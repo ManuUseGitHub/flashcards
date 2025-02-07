@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Output } from '@angular/core';
+import { Component, EventEmitter, Inject, Output } from '@angular/core';
 import { icons } from '../../../ressources/icons';
 import {
   createUserWithEmailAndPassword,
@@ -14,13 +14,18 @@ import { ConnexionService } from '../connexion.service';
   selector: 'app-sign-up',
   templateUrl: './sign-up.component.html',
   styleUrl: './sign-up.component.scss',
+  standalone: false,
 })
 export class SignUpComponent {
   icons = icons;
   @Output() toggleSign = new EventEmitter();
   filterForm!: FormGroup;
 
-  constructor(private fb: FormBuilder, private events: EventService, private connexion: ConnexionService) {}
+  constructor(
+    @Inject(FormBuilder) private fb: FormBuilder,
+    private events: EventService,
+    private connexion: ConnexionService
+  ) {}
   ngOnInit(): void {
     this.filterForm = this.fb.group({
       email: [],

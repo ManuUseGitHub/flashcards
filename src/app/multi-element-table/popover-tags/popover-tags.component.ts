@@ -8,7 +8,7 @@ import { introducedValue } from '../../../lib/strings';
   selector: 'app-popover-tags',
   templateUrl: './popover-tags.component.html',
   styleUrl: './popover-tags.component.scss',
-  standalone:false
+  standalone: false,
 })
 export class PopoverTagsComponent implements AfterViewInit {
   @Input() row!: any;
@@ -25,7 +25,7 @@ export class PopoverTagsComponent implements AfterViewInit {
 
   ngAfterViewInit(): void {
     this.filterService.getCharacteristics().subscribe((data: any) => {
-      this.events.broadcast(EVENTS.LOADED_FILTERS.toString(), data);
+      this.events.broadcast(EVENTS.LOADED_FILTERS, data);
       this.tags = data.tags;
     });
   }

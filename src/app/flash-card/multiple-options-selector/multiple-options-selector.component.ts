@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter, OnInit, OnDestroy } from '@angular/core';
+import { Component, Input, Output, EventEmitter, OnInit } from '@angular/core';
 import {
   faCircle,
   faCircleCheck,
@@ -6,7 +6,7 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import { EventService } from '../../shared/event.service';
 import { EVENTS } from '../../../ressources/enums';
-import { Subscription } from 'rxjs';
+import { SubscriberComponent } from '../../shared/subscriber/subscriber.component';
 
 @Component({
   selector: 'app-multiple-options-selector',
@@ -14,9 +14,10 @@ import { Subscription } from 'rxjs';
   styleUrls: ['./multiple-options-selector.component.scss'],
   standalone: false,
 })
-export class MultipleOptionsSelectorComponent implements OnInit, OnDestroy {
-  services: Subscription[] = [];
-
+export class MultipleOptionsSelectorComponent
+  extends SubscriberComponent
+  implements OnInit
+{
   // Input to receive tags from the parent component
   @Input()
   options: string[] = [];
@@ -38,11 +39,13 @@ export class MultipleOptionsSelectorComponent implements OnInit, OnDestroy {
   focused = '';
   hover = '';
 
-  constructor(private events: EventService) {}
+  constructor(private events: EventService) {
+    super();
+  }
 
   ngOnInit(): void {
-    this.services.push(
-      this.events.listen(EVENTS.LOADED_FILTERS.toString(), (data) => {
+    this.subscribe(
+      this.events.listen(EVENTS.LOADED_FILTERS, (data) => {
         this.options = data[this.filterKey];
       })
     );
@@ -87,10 +90,5 @@ export class MultipleOptionsSelectorComponent implements OnInit, OnDestroy {
 
   isHover(tag: string): boolean {
     return this.hover == tag;
-  }
-  ngOnDestroy() {
-    this.services.forEach((x) => {
-      x.unsubscribe();
-    });
   }
 }

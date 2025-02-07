@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Inject } from '@angular/core';
 import { initializeApp } from 'firebase/app';
 import { Auth, getAuth, onAuthStateChanged } from 'firebase/auth';
 import { environment } from '../../../environments/environment';
@@ -16,6 +16,7 @@ import { TitleService } from '../title/title.service';
   selector: 'app-profile-view',
   templateUrl: './profile-view.component.html',
   styleUrl: './profile-view.component.scss',
+  standalone: false,
 })
 export class ProfileViewComponent {
   titleStyles: string[] = flavours;
@@ -41,7 +42,7 @@ export class ProfileViewComponent {
   user?: ProfileUSer;
   constructor(
     private events: EventService,
-    private fb: FormBuilder,
+    @Inject(FormBuilder) private fb: FormBuilder,
     private titleService: TitleService
   ) {
     const userSession = sessionStorage.getItem('user');
@@ -78,7 +79,7 @@ export class ProfileViewComponent {
     getAuth()
       .signOut()
       .then(() => {
-        this.events.broadcast(EVENTS.DISCONNECT.toString(), null);
+        this.events.broadcast(EVENTS.DISCONNECT, null);
       });
   }
 }

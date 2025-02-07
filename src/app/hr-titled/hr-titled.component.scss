@@ -22,4 +22,9 @@
         pointer-events: none;
 
     }
+
+    .title-center {
+        left: unset !important;
+        transform: translate3d(-50%, -50%, 0);
+    }
 }

@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, Inject, OnInit } from '@angular/core';
 import {
   faChevronLeft,
   faChevronRight,
@@ -19,7 +19,7 @@ import {
 import { Router } from '@angular/router';
 import { icons } from '../../ressources/icons';
 import { EVENTS } from '../../ressources/enums';
-import { Subscription } from 'rxjs';
+import { SubscriberComponent } from '../shared/subscriber/subscriber.component';
 
 @Component({
   selector: 'app-flashcard',
@@ -27,15 +27,16 @@ import { Subscription } from 'rxjs';
   styleUrls: ['./flash-card.component.scss'],
   standalone: false,
 })
-export class FlashCardComponent implements OnInit, OnDestroy {
-  services: Subscription[] = [];
+export class FlashCardComponent extends SubscriberComponent implements OnInit {
   filters!: any;
   constructor(
     private cardService: CardServiceService,
     private events: EventService,
     private sorter: SortService,
-    private _router: Router
-  ) {}
+    @Inject(Router) private _router: Router
+  ) {
+    super();
+  }
 
   ngOnInit(): void {
     this.cardService.getCards().subscribe((data: any) => {
@@ -44,36 +45,30 @@ export class FlashCardComponent implements OnInit, OnDestroy {
         this.filters = sessionStorage.getItem('filters')!;
       }, 100);
       setTimeout(() => {
-        this.events.broadcast(
-          EVENTS.APPLY_FILTERS.toString(),
-          JSON.parse(this.filters)
-        );
+        this.events.broadcast(EVENTS.APPLY_FILTERS, JSON.parse(this.filters));
       }, 500);
     });
 
-    this.services.push(
-      this.events.listen(
-        EVENTS.APPLY_FILTERS.toString(),
-        (filters: EffectiveFilters) => {
-          console.log(filters);
-          this.composedList = this.cards.filter((e) =>
-            this.sorter.sumTests(
-              hasMatrchingText(filters, e),
-              hasMatchingArtcicle(filters, e),
-              hasMatchingType(filters, e),
-              removeMatchingSelect(filters.files, 'file', e),
-              hasMatchingClassmentSelect(filters.themes, 'theme', e),
-              hasMatchingClassmentSelect(filters.chapters, 'chapter', e),
-              hasMatchingClassmentSelect(filters.parts, 'part', e),
-              hasMultipleClassmentSelect(filters.tags, 'tags', e)
-            )
-          );
+    this.subscribe(
+      this.events.listen(EVENTS.APPLY_FILTERS, (filters: EffectiveFilters) => {
+        console.log(filters);
+        this.composedList = this.cards.filter((e) =>
+          this.sorter.sumTests(
+            hasMatrchingText(filters, e),
+            hasMatchingArtcicle(filters, e),
+            hasMatchingType(filters, e),
+            removeMatchingSelect(filters.files, 'file', e),
+            hasMatchingClassmentSelect(filters.themes, 'theme', e),
+            hasMatchingClassmentSelect(filters.chapters, 'chapter', e),
+            hasMatchingClassmentSelect(filters.parts, 'part', e),
+            hasMultipleClassmentSelect(filters.tags, 'tags', e)
+          )
+        );
 
-          this.isFromDutch = filters.fromTo == 'nl';
-          this.shuffle();
-          //this.refreshTable();
-        }
-      )
+        this.isFromDutch = filters.fromTo == 'nl';
+        this.shuffle();
+        //this.refreshTable();
+      })
     );
   }
 
@@ -172,11 +167,5 @@ export class FlashCardComponent implements OnInit, OnDestroy {
     }
 
     // Logic to go to the next card
-  }
-
-  ngOnDestroy() {
-    this.services.forEach((x) => {
-      x.unsubscribe();
-    });
   }
 }

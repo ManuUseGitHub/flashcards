@@ -1,5 +1,5 @@
 import { Injectable, isDevMode } from '@angular/core';
-import { Observable, Subject, Subscription } from 'rxjs';
+import { Subject } from 'rxjs';
 import { EVENTS } from '../../ressources/enums';
 
 @Injectable({
@@ -20,9 +20,10 @@ export class EventService {
         }
 
         this.subject.next({
-          eventName: EVENTS.DEBUG.toString(),
+          eventName: EVENTS.DEBUG,
           payload: {
-            name: EVENTS[Number.parseInt(eventName)],
+            //name: EVENTS[Number.parseInt(eventName)],
+            name: eventName,
             payload: { source, payload },
           },
         });

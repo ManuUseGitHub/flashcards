@@ -1,6 +1,5 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { catchError } from 'rxjs';
-import { HttpClient } from '@angular/common/http';
 import {
   standardOptions,
   handleError,
@@ -8,6 +7,7 @@ import {
 } from '../../../ressources/httpHelper';
 import { mapPreset } from '../../../ressources/mapper';
 import { API_VERSION_ID_JSON_SERVER } from '../../../ressources/microsevicesNames';
+import { HttpClient } from '@angular/common/http';
 
 const URL = base(API_VERSION_ID_JSON_SERVER + '/presets/');
 
@@ -15,6 +15,8 @@ const URL = base(API_VERSION_ID_JSON_SERVER + '/presets/');
   providedIn: 'root',
 })
 export class FlashCardPresetService {
+  private http = inject(HttpClient);
+
   getPresets() {
     const options = standardOptions;
 
@@ -35,6 +37,4 @@ export class FlashCardPresetService {
       .post(URL, mapPreset(data), options)
       .pipe(catchError(handleError));
   }
-
-  constructor(private http: HttpClient) {}
 }

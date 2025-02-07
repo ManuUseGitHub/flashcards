@@ -1,4 +1,4 @@
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Inject, OnInit, Output } from '@angular/core';
 import { icons } from '../../../ressources/icons';
 import { environment } from '../../../environments/environment';
 import { initializeApp } from 'firebase/app';
@@ -17,9 +17,10 @@ import { SyncUser } from '../../DTOs/syncUser';
 import { ProfileUSer } from '../../DTOs/profileUser';
 
 @Component({
-  selector: 'app-sign-in',
-  templateUrl: './sign-in.component.html',
-  styleUrl: './sign-in.component.scss',
+    selector: 'app-sign-in',
+    templateUrl: './sign-in.component.html',
+    styleUrl: './sign-in.component.scss',
+    standalone: false
 })
 export class SignInComponent implements OnInit {
   @Output() toggleSign = new EventEmitter();
@@ -27,7 +28,7 @@ export class SignInComponent implements OnInit {
 
   authForm!: FormGroup;
 
-  constructor(private fg: FormBuilder, private connexion: ConnexionService) {
+  constructor(@Inject(FormBuilder) private fg: FormBuilder, private connexion: ConnexionService) {
     const userSession = sessionStorage.getItem('user');
     if (!userSession) {
       initializeApp(environment.firebaseConfig);

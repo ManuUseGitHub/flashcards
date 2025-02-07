@@ -1,4 +1,27 @@
+export type CardModify = {
+  forModification: boolean;
+  forAttention: boolean;
+  forDeletion: boolean;
+  dutch: string;
+  french: string;
+  type?: string;
+  id: string;
+  part?: string;
+  chapter: string;
+  tags: string[];
+  theme: string;
+  issuer: string;
+  date: Date;
+  difficulty: number;
+  article: string;
+  file: string;
+}
+
 export type CardEntry = {
+  unverified: boolean;
+  forModification: boolean;
+  forAttention: boolean;
+  forDeletion: boolean;
   dutch: string;
   french: string;
   type?: string;
@@ -93,7 +116,7 @@ export type EffectiveFilters = {
 
 export type RegisterUser = {
   username: string;
-  passwordhash : string;
+  passwordhash: string;
   token: string;
   birthdate: Date;
 };

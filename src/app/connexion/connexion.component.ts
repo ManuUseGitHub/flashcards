@@ -1,41 +1,39 @@
-import { Component, OnDestroy } from '@angular/core';
+import { Component } from '@angular/core';
 import { icons } from '../../ressources/icons';
-import { Auth, getAuth, onAuthStateChanged } from 'firebase/auth';
+import { getAuth, onAuthStateChanged } from 'firebase/auth';
 import { initializeApp } from 'firebase/app';
 import { environment } from '../../environments/environment';
 import { EventService } from '../shared/event.service';
 import { mapSyncUser } from '../mappers/userMappers';
-import { Subscription } from 'rxjs';
 import { EVENTS } from '../../ressources/enums';
+import { SubscriberComponent } from '../shared/subscriber/subscriber.component';
 
 @Component({
-  selector: 'app-connexion',
-  templateUrl: './connexion.component.html',
-  styleUrl: './connexion.component.scss',
+    selector: 'app-connexion',
+    templateUrl: './connexion.component.html',
+    styleUrl: './connexion.component.scss',
+    standalone: false
 })
-export class ConnexionComponent implements OnDestroy {
+export class ConnexionComponent
+  extends SubscriberComponent
+{
   icons = icons;
   isSigningIn = true;
   user: any;
-  services: Subscription[] = [];
 
   get isAuthenticated() {
     return this.user != null;
   }
 
   constructor(private events: EventService) {
+    super();
     const userSession = sessionStorage.getItem('user');
     this.user = userSession ? JSON.parse(userSession) : this.getLoggedUser();
-    this.services.push(
-      events.listen(EVENTS.DISCONNECT.toString(), (event) => {
+    this.subscribe(
+      events.listen(EVENTS.DISCONNECT, (event) => {
         this.user = null;
       })
     );
-  }
-  ngOnDestroy(): void {
-    this.services.forEach((x) => {
-      x.unsubscribe();
-    });
   }
 
   getLoggedUser() {

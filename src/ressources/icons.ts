@@ -11,6 +11,7 @@ import {
   faChevronRight,
   faCircle,
   faCircleCheck,
+  faCircleExclamation,
   faClock,
   faDumbbell,
   faEnvelope,
@@ -58,4 +59,5 @@ export const icons = {
   mail: faEnvelope,
   brokeHeart: faHeartBroken,
   gear: faGear,
+  attention:faCircleExclamation
 };

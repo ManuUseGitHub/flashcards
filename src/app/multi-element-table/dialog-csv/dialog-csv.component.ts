@@ -104,7 +104,7 @@ export class DialogCSVComponent implements OnInit {
         this._loadingFromCSV = true;
         setTimeout(() => {
           csvData.forEach((x) => {
-            this.events.broadcast(EVENTS.ADDED_ROW.toString(), x);
+            this.events.broadcast(EVENTS.ADDED_ROW, x);
           });
           this._loadingFromCSV = false;
         }, 500);
@@ -116,7 +116,7 @@ export class DialogCSVComponent implements OnInit {
 
   patchNewCSVView(csv: string) {
     this.validity = isCsvValide(csv, REQUIRED_HEADERS);
-    this.events.broadcast(EVENTS.PATCH_CSV.toString(), csv);
+    this.events.broadcast(EVENTS.PATCH_CSV, csv);
   }
 
   onUploadFile(filecontents: string[]) {

@@ -2,7 +2,6 @@ import {
   AfterViewInit,
   Component,
   ElementRef,
-  OnDestroy,
   ViewChild,
 } from '@angular/core';
 import { icons } from '../../../ressources/icons';
@@ -14,9 +13,9 @@ import {
   fromEvent,
   map,
   Observable,
-  Subscription,
   throttleTime,
 } from 'rxjs';
+import { SubscriberComponent } from '../../shared/subscriber/subscriber.component';
 
 @Component({
   selector: 'app-nav-bar',
@@ -24,11 +23,10 @@ import {
   styleUrl: './nav-bar.component.scss',
   standalone: false,
 })
-export class NavBarComponent implements AfterViewInit, OnDestroy {
+export class NavBarComponent extends SubscriberComponent implements AfterViewInit {
   icons = icons;
   toolbarOfsetH: number = 0;
   scrollTop: number = 0;
-  services: Subscription[] = [];
   @ViewChild('content') content!: { elementRef: ElementRef };
   @ViewChild('toolbar') toolbar!: ElementRef;
 
@@ -40,11 +38,8 @@ export class NavBarComponent implements AfterViewInit, OnDestroy {
     .observe(Breakpoints.Handset)
     .pipe(map((x) => x.matches));
 
-  constructor(private bpObserver: BreakpointObserver) {}
-  ngOnDestroy(): void {
-    this.services.forEach((subscription) => {
-      subscription.unsubscribe();
-    });
+  constructor(private bpObserver: BreakpointObserver) {
+    super()
   }
   ngAfterViewInit(): void {
     setTimeout(() => {
@@ -55,7 +50,7 @@ export class NavBarComponent implements AfterViewInit, OnDestroy {
 
       this.toolbarOfsetH = toolbar.offsetHeight;
 
-      this.services.push(
+      this.subscribe(
         fromEvent(content, 'scroll')
           .pipe(throttleTime(60))
           .subscribe((ev) => {

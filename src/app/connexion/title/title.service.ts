@@ -1,15 +1,16 @@
 import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { base } from '../../../ressources/httpHelper';
-import { API_VERSION_ID_ORM } from '../../../ressources/microsevicesNames';
+import { API_VERSION_ID_NEXT } from '../../../ressources/microsevicesNames';
 
-const URL = base(API_VERSION_ID_ORM + '/title');
+const URL = base(API_VERSION_ID_NEXT + '/title');
 
 @Injectable({
   providedIn: 'root',
 })
 export class TitleService {
-  constructor(private client: HttpClient) {}
+  private client = inject(HttpClient);
+
 
   generateTitle(flavour: string) {
     return this.client.get(URL + '/' + flavour);

@@ -2,13 +2,39 @@
   <div button>
     <ng-content></ng-content>
   </div>
+  <ng-template #title>
+    <!-- title section -->
+    <div class="flex text-end">
+      <h3>Result {{ isCardLoaded ? ": edit" : "" }}</h3>
+      <div class="flex-1"></div>
+      <fa-icon [icon]="icons.x" class="close"></fa-icon>
+    </div>
+    <!-- end section -->
+  </ng-template>
   <ng-template #body>
+    <!-- body section -->
     <div class="container stretched-table">
+      <app-edit-entity [ngClass]="{ hidden: !isCardLoaded }"></app-edit-entity>
       <app-cards-data-table
+        [ngClass]="{ hidden: isCardLoaded }"
         [cards]="composedList"
         [dataSource]="dataSource"
       ></app-cards-data-table>
     </div>
+    <!-- end section -->
   </ng-template>
-  <ng-template #actions></ng-template>
+  <ng-template #actions>
+    <!-- actions section -->
+    <div class="flex-1 flex gap-1" *ngIf="editing">
+      <div class="flex-1"></div>
+      <div
+        class="btn btn-primary"
+        (click)="$event.stopPropagation(); saveEdit()"
+      >
+        <fa-icon [icon]="icons.floppy"></fa-icon>
+      </div>
+      <div class="btn btn-danger" (click)="cancelEdit()">cancel</div>
+    </div>
+    <!-- end section -->
+  </ng-template>
 </app-flnl-modal>

@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { catchError } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import {
@@ -15,6 +15,8 @@ const URL = base(API_VERSION_ID_JSON_SERVER + '/filters');
   providedIn: 'root',
 })
 export class FlashCardFilterService {
+  private http = inject(HttpClient);
+
   update() {
     const options = standardOptions;
     return this.http
@@ -31,6 +33,4 @@ export class FlashCardFilterService {
     const options = standardOptions;
     return this.http.get(URL, options).pipe(catchError(handleError));
   }
-
-  constructor(private http: HttpClient) {}
 }

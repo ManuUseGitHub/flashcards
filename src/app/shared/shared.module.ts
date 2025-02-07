@@ -1,7 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatInputModule } from '@angular/material/input';
@@ -25,6 +24,9 @@ import { MatListModule } from '@angular/material/list';
 import { CardsComponent } from './icons/cards.component';
 import { CsvEditableLinesPipe } from './pipes/csv-editable-lines.pipe';
 import { AlSlashComponent } from './icons/alSlash.component';
+import { SubscriberComponent } from './subscriber/subscriber.component';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -40,6 +42,7 @@ import { AlSlashComponent } from './icons/alSlash.component';
     CardsComponent,
     AlSlashComponent,
     CsvEditableLinesPipe,
+    SubscriberComponent,
   ],
   imports: [
     CommonModule,

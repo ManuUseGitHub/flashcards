@@ -1,7 +1,7 @@
 import {
   Component,
   HostListener,
-  OnDestroy,
+  Inject,
   OnInit,
   ViewChild,
 } from '@angular/core';
@@ -13,13 +13,13 @@ import { FlashCardFilterService } from '../flash-card/services/flash-card-filter
 import { EVENTS } from '../../ressources/enums';
 import { EventService } from '../shared/event.service';
 import { removeDuplicates } from '../../listUtils';
-import { Subscription } from 'rxjs';
 import { FieldEscapeCloser } from '../shared/filedEscapCloser';
 import { MatPaginator } from '@angular/material/paginator';
 import { CardServiceService } from '../flash-card/services/card-service.service';
 import { FormRowtype } from '../../ressources/types';
-import { makeTabbedCSV, PAD_DIRECTION } from '../../lib/strings';
+import { makeTabbedCSV } from '../../lib/strings';
 import { parsePadDirection } from '../../lib/enums';
+import { SubscriberComponent } from '../shared/subscriber/subscriber.component';
 
 @Component({
   selector: 'app-multi-element-table',
@@ -27,8 +27,10 @@ import { parsePadDirection } from '../../lib/enums';
   styleUrls: ['./multi-element-table.component.scss'],
   standalone: false,
 })
-export class MultiElementTableComponent implements OnInit, OnDestroy {
-  services: Subscription[] = [];
+export class MultiElementTableComponent
+  extends SubscriberComponent
+  implements OnInit
+{
   globalForm!: FormGroup;
   csvForm!: FormGroup;
   tableForm: FormGroup;
@@ -84,11 +86,12 @@ export class MultiElementTableComponent implements OnInit, OnDestroy {
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
   constructor(
-    private fb: FormBuilder,
+    @Inject(FormBuilder) private fb: FormBuilder,
     private filterService: FlashCardFilterService,
     private events: EventService,
     private cards: CardServiceService
   ) {
+    super();
     this.closer = new FieldEscapeCloser(events);
     this.tableForm = this.fb.group({
       rows: this.fb.array([]),
@@ -147,18 +150,18 @@ export class MultiElementTableComponent implements OnInit, OnDestroy {
         this.patchNewCSVView(this._csvContent);
       });
     });
-    this.services.push(
-      this.events.listen(EVENTS.FOCUS_NEXT.toString(), (event) => {
+    this.subscribe(
+      this.events.listen(EVENTS.FOCUS_NEXT, (event) => {
         this.focusNext();
       }),
-      this.events.listen(EVENTS.PATCH_CSV.toString(), (event) => {
+      this.events.listen(EVENTS.PATCH_CSV, (event) => {
         this._csvContent = event;
         this.patchNewCSVView(event);
       }),
-      this.events.listen(EVENTS.ADDED_ROW.toString(), (event) => {
+      this.events.listen(EVENTS.ADDED_ROW, (event) => {
         this.addRow(event);
       }),
-      this.events.listen(EVENTS.DEBUG.toString(), (data) => {
+      this.events.listen(EVENTS.DEBUG, (data) => {
         console.log(data);
       })
     );
@@ -334,12 +337,12 @@ export class MultiElementTableComponent implements OnInit, OnDestroy {
   }
 
   closePopover(event: { event: any; canClose: boolean }) {
-    this.events.broadcast(EVENTS.LOST_FOCUS.toString(), event);
+    this.events.broadcast(EVENTS.LOST_FOCUS, event);
   }
 
   setFocusDirection(event: any) {
     if (event.shiftKey || event.key == 'Shift') {
-      this.events.broadcast(EVENTS.TAB_DIRECTION.toString(), {
+      this.events.broadcast(EVENTS.TAB_DIRECTION, {
         event,
         canClose: false,
       });
@@ -347,16 +350,11 @@ export class MultiElementTableComponent implements OnInit, OnDestroy {
   }
 
   onRowClick(row: any) {
-    this.events.broadcast(EVENTS.LOAD_CARD.toString(), row);
+    this.events.broadcast(EVENTS.LOAD_CARD, row);
   }
 
   onPageChanged(event: any) {
     this.pageIndex = event.pageIndex;
     this.pageSize = event.pageSize;
-  }
-  ngOnDestroy() {
-    this.services.forEach((x) => {
-      x.unsubscribe();
-    });
   }
 }

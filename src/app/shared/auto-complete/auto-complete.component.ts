@@ -1,12 +1,6 @@
-import {
-  Component,
-  Input,
-  OnDestroy,
-  OnInit,
-  ViewChild,
-} from '@angular/core';
+import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { FormGroup } from '@angular/forms';
-import { Observable, Subscription } from 'rxjs';
+import { Observable } from 'rxjs';
 import { map, startWith } from 'rxjs/operators';
 import { EVENTS } from '../../../ressources/enums';
 import { EventService } from '../event.service';
@@ -14,6 +8,7 @@ import {
   MatAutocomplete,
   MatAutocompleteTrigger,
 } from '@angular/material/autocomplete';
+import { SubscriberComponent } from '../subscriber/subscriber.component';
 
 @Component({
   selector: 'app-auto-complete',
@@ -21,11 +16,13 @@ import {
   styleUrl: './auto-complete.component.scss',
   standalone: false,
 })
-export class AutoCompleteComponent implements OnInit, OnDestroy {
+export class AutoCompleteComponent
+  extends SubscriberComponent
+  implements OnInit
+{
   @ViewChild(MatAutocomplete) auto!: any;
   @ViewChild(MatAutocompleteTrigger) autoTrigger!: MatAutocompleteTrigger;
 
-  services: Subscription[] = [];
   @Input()
   myClass = 'w-full';
   @Input()
@@ -45,7 +42,9 @@ export class AutoCompleteComponent implements OnInit, OnDestroy {
   isMouseIn: boolean = false;
   timer: any;
 
-  constructor(private events: EventService) {}
+  constructor(private events: EventService) {
+    super();
+  }
 
   toggleAutoComplete(event: any) {
     this.visibleOptions = !this.visibleOptions;
@@ -64,27 +63,22 @@ export class AutoCompleteComponent implements OnInit, OnDestroy {
       startWith(''),
       map((value) => this._filter(value || ''))
     );
-    this.services.push(
+    this.subscribe(
       ...[
-        this.events.listen(EVENTS.CLOSE_OTHER_POPOVERS.toString(), () => {
+        this.events.listen(EVENTS.CLOSE_OTHER_POPOVERS, () => {
           this.auto.showPanel = false;
         }),
       ]
     );
   }
-  ngOnDestroy() {
-    this.services.forEach((x) => {
-      x.unsubscribe();
-    });
-  }
 
   handleKeyEscape(event: any) {
     if (event.key == 'Escape') {
-      this.events.broadcast(EVENTS.ESCAPED.toString(), event);
+      this.events.broadcast(EVENTS.ESCAPED, event);
     }
   }
   resetEscapeCount(event: any) {
-    this.events.broadcast(EVENTS.RESET_ESCAPER.toString(), event);
+    this.events.broadcast(EVENTS.RESET_ESCAPER, event);
   }
 
   private _filter(value: string): string[] {

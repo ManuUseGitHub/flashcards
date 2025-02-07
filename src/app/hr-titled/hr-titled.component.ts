@@ -8,4 +8,16 @@ import { Component, Input } from '@angular/core';
 })
 export class HrTitledComponent {
   @Input() text: string = 'Separator';
+  @Input() options!: {
+    sepClassnames?: string[];
+    hrClassnames?: string[];
+  };
+
+  get classNames() {
+    const copy = { ...this.options };
+    return {
+      sepClassnames: copy.sepClassnames?.join(' '),
+      hrClassnames: copy.hrClassnames?.join(' '),
+    };
+  }
 }

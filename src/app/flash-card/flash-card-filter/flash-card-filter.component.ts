@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, Inject } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { FlashCardFilterService } from '../services/flash-card-filter.service';
 import { EventService } from '../../shared/event.service';
@@ -6,7 +6,6 @@ import { icons } from '../../../ressources/icons';
 import { Router } from '@angular/router';
 import { FlashCardPresetService } from '../services/flash-card-preset.service';
 import { EVENTS } from '../../../ressources/enums';
-import { Subscription } from 'rxjs';
 import { CardEntry, EffectiveFilters } from '../../../ressources/types';
 import { CardServiceService } from '../services/card-service.service';
 import { makeCompleteList } from '../../listCompleter';
@@ -20,6 +19,7 @@ import {
 import { hasMatchingType } from '../../sorting/typeSorting';
 import { SortService } from '../../sort.service';
 import { MatTableDataSource } from '@angular/material/table';
+import { SubscriberComponent } from '../../shared/subscriber/subscriber.component';
 
 const MULTISELECT_HEADERS = ['themes', 'parts', 'chapters', 'tags', 'files'];
 
@@ -29,8 +29,7 @@ const MULTISELECT_HEADERS = ['themes', 'parts', 'chapters', 'tags', 'files'];
   styleUrl: './flash-card-filter.component.scss',
   standalone: false,
 })
-export class FlashCardFilterComponent implements OnDestroy {
-  services: Subscription[] = [];
+export class FlashCardFilterComponent extends SubscriberComponent {
   icons = icons;
   filterForm!: FormGroup;
 
@@ -71,14 +70,15 @@ export class FlashCardFilterComponent implements OnDestroy {
   retrievedFilters: any = {};
 
   constructor(
-    private fb: FormBuilder,
+    @Inject(FormBuilder) private fb: FormBuilder,
     private filterService: FlashCardFilterService,
-    private events: EventService,
+    protected events: EventService,
     private presets: FlashCardPresetService,
-    private _router: Router,
+    @Inject(Router) private _router: Router,
     private cardService: CardServiceService,
     private sorter: SortService
   ) {
+    super();
     this.dataSource = new MatTableDataSource<CardEntry>([]);
   }
 
@@ -111,15 +111,32 @@ export class FlashCardFilterComponent implements OnDestroy {
       difficultyHigh: [[]],
       preset: [null],
     });
-    this.cardService.getCards().subscribe((data: any) => {
-      setTimeout(() => {
-        this.cards = makeCompleteList(data);
-        this.events.broadcast(EVENTS.DATASET_CHANGED.toString(), true);
-      }, 0);
+    this.subscribe(
+      ...[
+        this.fetchCardsSubscription(),
+        this.fetchCharacteristicsSubscription(),
+        this.onLoadedFiltersSubscription(),
+        this.onLoadedPresetsSubscription(),
+        this.onSavedFiltersSubscription(),
+        this.onFilterAppliedSubscription(),
+        this.onSyncLocalCards(),
+        this.onDebugSubscription(),
+      ]
+    );
+  }
+  onSyncLocalCards() {
+    return this.events.listen(EVENTS.SYNC_LOCAL_CARDS, (data) => {
+      const index = this.cards.findIndex((x) => x.id == data.id);
+      if (index != -1) {
+        console.log(data);
+        this.cards[index] = data;
+        this.events.broadcast(EVENTS.APPLY_FILTERS, this.filterForm.value);
+      }
     });
-
-    this.filterService.getCharacteristics().subscribe((data: any) => {
-      this.events.broadcast(EVENTS.LOADED_FILTERS.toString(), data);
+  }
+  fetchCharacteristicsSubscription() {
+    return this.filterService.getCharacteristics().subscribe((data: any) => {
+      this.events.broadcast(EVENTS.LOADED_FILTERS, data);
       this.articles = data.article;
       this.types = data.type;
       this.tags = data.tags;
@@ -136,60 +153,86 @@ export class FlashCardFilterComponent implements OnDestroy {
 
       this.filterForm.valueChanges.subscribe((x) => {
         this.saved = false;
-        this.events.broadcast(EVENTS.APPLY_FILTERS.toString(), x);
+        this.events.broadcast(EVENTS.APPLY_FILTERS, x);
 
         this.updateBadges();
       });
     });
-
-    this.services.push(
-      ...[
-        this.events.listen(EVENTS.LOADED_FILTERS.toString(), () => {
-          setTimeout(() => {
-            this.events.broadcast(
-              EVENTS.APPLY_FILTERS.toString(),
-              this.filterForm.value
-            );
-            this.updateBadges();
-          }, 500);
-        }),
-
-        this.events.listen(EVENTS.LOAD_PRESET.toString(), (data) => {
-          this.resetField();
-          this.filterForm.patchValue({ preset: data.preset });
-          this.applyConfiguration(JSON.stringify(data));
-          this.updateBadges();
-        }),
-
-        this.events.listen(EVENTS.SAVE_FILTERS.toString(), (data) => {
-          this.onSubmit();
-        }),
-
-        this.events.listen(
-          EVENTS.APPLY_FILTERS.toString(),
-          (filters: EffectiveFilters) => {
-            this.composedList = this.cards.filter((e) =>
-              this.sorter.sumTests(
-                hasMatchingArtcicle(filters, e),
-                hasMatchingType(filters, e),
-                removeMatchingSelect(filters.files, 'file', e),
-                hasMatchingClassmentSelect(filters.themes, 'theme', e),
-                hasMatchingClassmentSelect(filters.chapters, 'chapter', e),
-                hasMatchingClassmentSelect(filters.parts, 'part', e),
-                hasMultipleClassmentSelect(filters.tags, 'tags', e),
-                hasMatrchingText(filters, e)
-              )
-            );
-          }
-        ),
-        this.events.listen(EVENTS.DEBUG.toString(), (data) => {
-          console.log(data);
-        }),
-      ]
+  }
+  fetchCardsSubscription() {
+    return this.cardService.getCards().subscribe((data: any) => {
+      setTimeout(() => {
+        this.cards = makeCompleteList(data);
+        this.events.broadcast(EVENTS.DATASET_CHANGED, true);
+      }, 0);
+    });
+  }
+  onDebugSubscription() {
+    return this.events.listen(EVENTS.DEBUG, (data) => {
+      console.log(data);
+    });
+  }
+  onFilterAppliedSubscription() {
+    return this.events.listen(
+      EVENTS.APPLY_FILTERS,
+      (filters: EffectiveFilters) => {
+        this.composedList = this.cards.filter((e) =>
+          this.sorter.sumTests(
+            hasMatchingArtcicle(filters, e),
+            hasMatchingType(filters, e),
+            removeMatchingSelect(filters.files, 'file', e),
+            hasMatchingClassmentSelect(filters.themes, 'theme', e),
+            hasMatchingClassmentSelect(filters.chapters, 'chapter', e),
+            hasMatchingClassmentSelect(filters.parts, 'part', e),
+            hasMultipleClassmentSelect(filters.tags, 'tags', e),
+            hasMatrchingText(filters, e)
+          )
+        );
+      }
     );
   }
+  onSavedFiltersSubscription() {
+    return this.events.listen(EVENTS.SAVE_FILTERS, (data) => {
+      this.onSubmit();
+    });
+  }
+  onLoadedPresetsSubscription() {
+    return this.events.listen(EVENTS.LOAD_PRESET, (data) => {
+      this.resetField();
+      this.filterForm.patchValue({ preset: data.preset });
+      this.applyConfiguration(JSON.stringify(data));
+      this.updateBadges();
+    });
+  }
+  applyConfiguration(retrievedFilters: string) {
+    if (retrievedFilters) {
+      this.events.broadcast(EVENTS.SESSION_FILTERS, retrievedFilters);
+      //this.filterForm.patchValue(JSON.parse(retrievedFilters));
 
-  compose() {}
+      MULTISELECT_HEADERS.forEach((s) => {
+        this.selectedMultiples[s] = JSON.parse(retrievedFilters)[s];
+      });
+
+      this.filterForm.patchValue(JSON.parse(retrievedFilters));
+    } else {
+      this.events.broadcast(EVENTS.SESSION_FILTERS, this.filterForm.value);
+    }
+  }
+
+  onToggleForMultiple(name: string, event: string[]) {
+    const toPatch: { [k: string]: string[] } = {};
+    toPatch[name] = event;
+    this.filterForm.patchValue(toPatch);
+  }
+
+  onLoadedFiltersSubscription() {
+    return this.events.listen(EVENTS.LOADED_FILTERS, () => {
+      setTimeout(() => {
+        this.events.broadcast(EVENTS.APPLY_FILTERS, this.filterForm.value);
+        this.updateBadges();
+      }, 500);
+    });
+  }
   resetField() {
     MULTISELECT_HEADERS.forEach((s) => {
       this.selectedMultiples[s] = [];
@@ -202,32 +245,6 @@ export class FlashCardFilterComponent implements OnDestroy {
       difficultyHigh: '*',
       difficultyStyle: '*',
     });
-  }
-  applyConfiguration(retrievedFilters: string) {
-    if (retrievedFilters) {
-      this.events.broadcast(
-        EVENTS.SESSION_FILTERS.toString(),
-        retrievedFilters
-      );
-      //this.filterForm.patchValue(JSON.parse(retrievedFilters));
-
-      MULTISELECT_HEADERS.forEach((s) => {
-        this.selectedMultiples[s] = JSON.parse(retrievedFilters)[s];
-      });
-
-      this.filterForm.patchValue(JSON.parse(retrievedFilters));
-    } else {
-      this.events.broadcast(
-        EVENTS.SESSION_FILTERS.toString(),
-        this.filterForm.value
-      );
-    }
-  }
-
-  onToggleForMultiple(name: string, event: string[]) {
-    const toPatch: { [k: string]: string[] } = {};
-    toPatch[name] = event;
-    this.filterForm.patchValue(toPatch);
   }
 
   toggleLanguage(event: string) {
@@ -265,11 +282,5 @@ export class FlashCardFilterComponent implements OnDestroy {
 
   scanCategories() {
     this.filterService.update().subscribe((data: any) => {});
-  }
-
-  ngOnDestroy() {
-    this.services.forEach((x) => {
-      x.unsubscribe();
-    });
   }
 }

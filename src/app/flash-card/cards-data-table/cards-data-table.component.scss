@@ -10,6 +10,13 @@ th.mat-sort-header-sorted {
     color: black;
 }
 
+th[mat-header-cell],
+th.mat-sort-header,
+.mat-sort-header-container {
+    text-align: center;
+    justify-items: center;
+}
+
 tr[mat-row] {
     transition: background .5s ease-in-out, color .5s ease-in-out;
 
@@ -28,4 +35,12 @@ tr[mat-row] {
     .mat-mdc-paginator-container {
         justify-content: center;
     }
+}
+
+.het-art-color {
+    color: orange;
+}
+
+.de-art-color {
+    color: rgb(0, 196, 170)
 }
