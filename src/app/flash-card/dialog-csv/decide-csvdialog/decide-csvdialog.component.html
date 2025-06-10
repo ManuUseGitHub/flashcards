@@ -1,0 +1,32 @@
+<ng-template #title>
+  <h1><fa-icon [icon]="icons.excel"></fa-icon> CSV</h1>
+  <p>
+    Save up encoding time by importing a CSV file or
+    <a
+      href="#"
+      (click)="$event.preventDefault(); go.toCreate()"
+      class="text-blue-500 underline"
+      >create</a
+    >
+    a CSV from a translated text
+  </p>
+</ng-template>
+<ng-template #body>
+  <!-- Parent that fills the dialog content -->
+  <div
+    class="absolute top-0 left-0 w-full min-h-full flex items-center justify-center"
+  >
+    <!-- Container for vertically stacked buttons -->
+    <div class="items-center text-center space-y-4 w-full px-4">
+      <button class="btn btn-primary w-4/5 h-32" (click)="go.toFile()">
+        <fa-icon [icon]="icons.excel"></fa-icon> Load a CSV from my computer
+      </button>
+      <button class="btn btn-primary w-4/5 h-32" (click)="go.toCreate()">
+        <fa-icon [icon]="icons.pen"></fa-icon> Translate a text
+      </button>
+    </div>
+  </div>
+</ng-template>
+<ng-template #actions>
+  <button class="btn btn-danger" (click)="go.close()">Close</button>
+</ng-template>

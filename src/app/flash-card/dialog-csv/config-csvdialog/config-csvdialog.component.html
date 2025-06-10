@@ -1,0 +1,151 @@
+<ng-template #title>
+  <h1>
+    <fa-icon [icon]="icons.gear" class="autowidth"></fa-icon> CSV -
+    Configuration
+  </h1>
+</ng-template>
+<ng-template #body>
+  <div
+    class="absolute top-0 left-0 w-full min-h-full flex items-center justify-center py-4"
+  >
+    <div class="items-center text-center space-y-4 w-4/5">
+      <ul class="nav nav-tabs justify-center" id="tabConfig" role="tablist">
+        <li class="nav-item" role="presentation">
+          <button
+            class="nav-link"
+            [ngClass]="{ active: isTabSelected('Translators') }"
+            id="translators-tab"
+            data-bs-toggle="tab"
+            data-bs-target="#translators"
+            type="button"
+            role="tab"
+            aria-controls="translators"
+            [attr.aria-selected]="isTabSelected('Translators')"
+          >
+            Translators
+          </button>
+        </li>
+        <li class="nav-item" role="presentation">
+          <button
+            class="nav-link"
+            [ngClass]="{ active: isTabSelected('Automations') }"
+            id="automation-tab"
+            data-bs-toggle="tab"
+            data-bs-target="#automation"
+            type="button"
+            role="tab"
+            aria-controls="automation"
+            [attr.aria-selected]="isTabSelected('Automations')"
+          >
+            Automations
+          </button>
+        </li>
+      </ul>
+      <div class="tab-content bg-white" id="myTabContent">
+        <div
+          class="tab-pane show fade p-4"
+          [ngClass]="{ active: isTabSelected('Translators') }"
+          id="translators"
+          role="tabpanel"
+          aria-labelledby="translators-tab"
+        >
+          <div class="text-left mb-4 row">
+            <div class="col-sm-8 flex justify-center">
+              <img src="assets/images/deepl-logo-vector.svg" />
+            </div>
+            <div class="col content-between p-4 paragraph-deepl">
+              <p>
+                Our platform supports full-text translation and generates
+                spreadsheets using DeepL's services.
+              </p>
+              <p>
+                To use this feature, you'll need a DeepL account and API key.
+              </p>
+              <p>
+                We don’t maintain a costly partnership with DeepL, allowing you
+                full control over your translation usage.
+              </p>
+            </div>
+          </div>
+          <div class="border p-4">
+            <app-hr-titled [text]="'Settings'"></app-hr-titled>
+            <div class="col-sm-12 text-left">
+              <p>
+                Access your API key configuration here and determine the number
+                of usages before we ask you to reenter it. This is a measure to
+                prevent any abuse of your key. We will not delete the actual key
+                on DeepL's behalve.
+              </p>
+            </div>
+
+            <div class="text-end">
+              <button class="btn btn-primary" (click)="go.toConfig_B()">
+                <fa-icon [icon]="icons.gear"></fa-icon>
+              </button>
+            </div>
+          </div>
+        </div>
+        <div
+          class="tab-pane show fade p-4"
+          [ngClass]="{ active: isTabSelected('Automations') }"
+          id="automation"
+          role="tabpanel"
+          aria-labelledby="automation-tab"
+        >
+          <div class="text-left row">
+            <div class="automation-text col content-between p-4">
+              <p>
+                Our platform generates CSV files that are compatible with
+                spreadsheet programs like Excel to add cards to our database.
+                Some columns are required, but values can be inferred using
+                grammar-based rules.
+              </p>
+              <p>
+                These rules use regular expressions (also known as regex) — a
+                way to define patterns and recognition in text. While regex
+                might seem technical and obscure, you don’t need to fully
+                understand or master it. Helpful tools like ChatGPT can assist
+                you in creating them without prior experience.
+              </p>
+              <p>
+                For instance, in French, words often require an article like
+                “le” or “la.” A regex rule can detect if a translated word ends
+                in “e” and automatically assign the article “la.” This removes
+                the need for manual input and saves time.
+              </p>
+              <p>
+                Example rule: <code>/e$/ → la</code> means “if the word ends in
+                'e', use 'la'.”
+              </p>
+            </div>
+            <div class="col-md-6 automation-empty"></div>
+            <div class="border p-4">
+              <app-hr-titled [text]="'Settings'"></app-hr-titled>
+              <p>
+                These settings will complete the cell for given columns. Some of
+                the automations are provided by us and don"t have to be set.
+                However, feel free to define your own rules or bring
+                modification to existing ones
+              </p>
+              <app-dropdown-checkbox-search
+                [withCreateButton]="true"
+                (shapes)="go.toConfig_A()"
+                [options]="systemOptions"
+                [specifics]="specificOptions"
+                [target]="'automations'"
+                [intro]="'Automations'"
+              ></app-dropdown-checkbox-search>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-template>
+<ng-template #actions>
+  <button class="btn btn-primary" (click)="go.toCreate()">
+    <fa-icon [icon]="icons.arrowLeft"></fa-icon>
+  </button>
+  <button class="btn btn-primary" (click)="applyConfig()">Apply</button>
+  <button class="btn btn-danger" (click)="go.close()">Close</button>
+</ng-template>

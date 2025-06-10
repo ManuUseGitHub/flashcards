@@ -1,0 +1,41 @@
+<app-flnl-modal>
+  <span>CSV</span>
+
+  <ng-container *ngIf="state">
+    <app-decide-csvdialog
+      *ngIf="isOfState('CSV')"
+      #child
+    ></app-decide-csvdialog>
+    <app-create-csvdialog
+      *ngIf="isOfState('CREATE')"
+      #child
+    ></app-create-csvdialog>
+    <app-file-csvdialog *ngIf="isOfState('FILE')" #child></app-file-csvdialog>
+    <app-config-csvdialog
+      *ngIf="isOfState('CONFIG')"
+      #child
+    ></app-config-csvdialog>
+    <app-config-automation-csvdialog
+      *ngIf="isOfState('CONFIG_AUTOMATION')"
+      #child
+    ></app-config-automation-csvdialog>
+    <app-config-apikey-csvdialog
+      *ngIf="isOfState('CONFIG_API_KEY')"
+      #child
+    ></app-config-apikey-csvdialog>
+
+    <ng-template #title *ngIf="child != undefined">
+      <ng-container
+        *ngTemplateOutlet="child.getTemplate().title"
+      ></ng-container>
+    </ng-template>
+    <ng-template #body *ngIf="child != undefined">
+      <ng-container *ngTemplateOutlet="child.getTemplate().body"></ng-container>
+    </ng-template>
+    <ng-template #actions *ngIf="child != undefined">
+      <ng-container
+        *ngTemplateOutlet="child.getTemplate().actions"
+      ></ng-container>
+    </ng-template>
+  </ng-container>
+</app-flnl-modal>

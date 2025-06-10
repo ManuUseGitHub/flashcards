@@ -1,0 +1,14 @@
+{
+    "automations": [
+        {
+            "column": "type",
+            "regex": "~/^(?<verb>[\\w]+en)$|^(?<task>[tT]aak:.+)$|^(?<sentence>(?:s')?[A-Z][^?!.]*[!?.]{1,3})$|^(?<words>(?:[^\\s]+\\s){2,}[^\\s]+)|^(?<noun>\\w+)$/",
+            "isSystem": true
+        },
+        {
+            "column": "article",
+            "regex": "~/^(?<article>de|het)\\s/",
+            "isSystem": true
+        }
+    ]
+}

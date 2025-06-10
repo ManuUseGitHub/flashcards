@@ -1,0 +1,82 @@
+<ng-template #title>
+  <h1><fa-icon [icon]="icons.excel"></fa-icon> File</h1>
+  <p>
+    Get your entries from a CSV file or
+    <a
+      href="#"
+      (click)="$event.preventDefault(); go.toCreate()"
+      class="text-blue-500 underline"
+      >create</a
+    >
+    one with the help of our integrated translator
+  </p>
+</ng-template>
+<ng-template #body>
+  <div
+    [formGroup]="csvForm"
+    class="absolute top-0 left-0 w-full h-full flex items-center justify-center"
+  >
+    <div
+      class="flex flex-col items-center text-center space-y-4 w-full h-full px-4"
+    >
+      <textarea
+        hidden
+        class="w-full stretch-textarea"
+        matInput
+        formControlName="csv"
+        placeholder="CSV"
+      ></textarea>
+      <div
+        class="flex editable-div w-full flex-1 resize-none relative"
+        #contentDiv
+      >
+        <div
+          #inputCSVHeaders
+          class="w-fit"
+          contenteditable="false"
+          [innerHTML]="csvEditable | csvEditableLines : 0"
+        ></div>
+        <div
+          #inputCSVLines
+          class="absolute top-8 bottom-20 right-0 left-0"
+          contenteditable="true"
+          (input)="onInput($event)"
+          [innerHTML]="csvBody | csvEditableLines : 1 : validity"
+        ></div>
+        <div class="absolute shadow bottom-5 left-5 flex gap-4 text-format">
+          <span *ngIf="inputCSVLines">{{ linesCount }} lines</span>
+          <button class="btn" (click)="setDisplayCsv('none')">
+            <app-al-slash class="h-4"></app-al-slash></button
+          ><button class="btn" (click)="setDisplayCsv('right')">
+            <fa-icon [icon]="icons.alLeft"></fa-icon>
+          </button>
+          <button class="btn" (click)="setDisplayCsv('center')">
+            <fa-icon [icon]="icons.alCenter"></fa-icon></button
+          ><button class="btn" (click)="setDisplayCsv('left')">
+            <fa-icon [icon]="icons.alRight"></fa-icon>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="container stretched min-w-full" [formGroup]="csvForm"></div>
+  <mat-progress-bar
+    mode="indeterminate"
+    [hidden]="!isLoadingFromCSV"
+  ></mat-progress-bar>
+</ng-template>
+<ng-template #actions>
+  <app-file-upload
+    (onReadFileContent)="onUploadFile($event)"
+    [isMultiple]="true"
+    ><ng-template> <fa-icon [icon]="icons.file"></fa-icon> Load </ng-template>
+  </app-file-upload>
+  <button
+    class="btn btn-primary m-0"
+    [disabled]="!validity.valid"
+    (click)="importFromCSVContent()"
+  >
+    generate
+  </button>
+  <button class="btn btn-danger" (click)="go.close()">Close</button>
+</ng-template>

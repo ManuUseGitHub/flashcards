@@ -1,0 +1,136 @@
+<ng-template #title>
+  <h1><fa-icon [icon]="icons.pen"></fa-icon> Create</h1>
+  <p>
+    Paste here a text you find interesting and make it a CSV with target
+    language cells translated with the help of our DeepL integration or
+    <a
+      href="#"
+      (click)="$event.preventDefault(); go.toFile()"
+      class="text-blue-500 underline"
+      >import</a
+    >
+    a CSV from your computer
+  </p>
+</ng-template>
+
+<ng-template #body>
+  <div
+    [formGroup]="configForm"
+    class="absolute top-0 left-0 w-full h-full flex p-4 items-center justify-center"
+  >
+    <div class="flex flex-col items-center text-center space-y-4 w-full h-full">
+      <div class="row flex-1 w-full border rounded gap-2">
+        <div class="col flex flex-col text-left p-4 min-h-96">
+          <h5>1. Enter something</h5>
+          <p>Type your text here</p>
+          <textarea
+            class="w-full flex-1 resize-none p-1 border"
+            matInput
+            formControlName="baseText"
+            [placeholder]="loremPlaceholder"
+          ></textarea>
+          <div class="flex">
+            <p
+              class="text-end"
+              [ngClass]="{ 'text-danger': isCharacterInvalid() }"
+            >
+              {{ baseTextCount }}/{{ testCharacterMax }}
+            </p>
+            <div class="w-full flex items-center justify-end mt-2">
+              <button class="btn btn-dark" (click)="clearFile()">
+                clear <fa-icon [icon]="icons.broom"></fa-icon>
+              </button>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4 bg-primary text-white flex flex-col text-left p-4">
+          <h5 class="text-left">2. Translate</h5>
+          <p *ngIf="!isFileGenerated">Here is what you may do</p>
+          <div
+            class="flex flex-col flex-1 justify-center"
+            *ngIf="!isFileGenerated; else generated"
+          >
+            <div class="flex flex-col flex-1 justify-center gap-2">
+              <div class="border rounded p-1 gap-2">
+                <h6>i. Configure the translator</h6>
+                <p>this is required to make system translations</p>
+                <div *ngIf="!isPersistedKey; else configurationOk">
+                  <button class="btn btn-dark" (click)="go.toConfig()">
+                    <fa-icon [icon]="icons.gear"></fa-icon>
+                  </button>
+                </div>
+                <ng-template #configurationOk>
+                  <div class="bg-success p-2">
+                    <p>
+                      <fa-icon [icon]="icons.circleChecked"></fa-icon> You are
+                      all good with this step
+                    </p>
+                    <div class="w-full flex items-center justify-end gap-4">
+                      <!-- DEEPL LOADDED KEY -->
+                      <span>{{ apiKeyName }} | {{ uses }}</span>
+                      <!-- SETTINGS BUTTON -->
+                      <button class="btn btn-dark" (click)="go.toConfig()">
+                        <fa-icon [icon]="icons.gear"></fa-icon>
+                      </button>
+                    </div>
+                  </div>
+                </ng-template>
+              </div>
+              <div
+                class="border rounded p-1 gap-2"
+                [ngClass]="{ 'opacity-50': !isPersistedKey }"
+              >
+                <h6>ii. Perform a translation</h6>
+                <button
+                  class="btn btn-primary"
+                  [ngClass]="{ 'btn-danger': isTranslationDisabled }"
+                  [disabled]="isTranslationDisabled"
+                  (click)="generate()"
+                >
+                  let's go
+                </button>
+                <p>this will give you a file we can get informations from</p>
+              </div>
+            </div>
+          </div>
+          <ng-template #generated>
+            <p>Here is the result of the translation changed into a file</p>
+            <div class="flex flex-col flex-1 justify-center">
+              <div class="file-info border rounded p-1 gap-2">
+                <div class="flex gap-2">
+                  <div class="w-1/5 flex justify-center align-items-center">
+                    <img [src]="fileIcon" alt="file icon" />
+                  </div>
+                  <div class="flex-1">
+                    <div class="file-name">
+                      {{ fileInfos.name }}
+                      <span class="file-size">({{ fileInfos.size }})</span>
+                    </div>
+                    <div class="flex gap-2">
+                      <div class="btn btn-sm btn-dark" (click)="onLoadFile()">
+                        load infos
+                      </div>
+                      <div class="btn btn-sm btn-dark">
+                        <fa-icon [icon]="icons.down"></fa-icon>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div
+                class="btn btn-sm btn-primary mt-4 h-12 content-center"
+                (click)="clearFile()"
+              >
+                Clear
+              </div>
+            </div>
+          </ng-template>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #actions>
+  <button class="btn btn-danger" (click)="go.close()">Close</button>
+</ng-template>

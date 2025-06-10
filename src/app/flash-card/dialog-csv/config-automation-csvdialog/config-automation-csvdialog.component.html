@@ -1,0 +1,144 @@
+<ng-template #title>
+  <h1>
+    <fa-icon [icon]="icons.gear" class="autowidth"></fa-icon> CSV - Automations
+  </h1>
+</ng-template>
+<ng-template #body>
+  <div
+    class="absolute top-0 left-0 w-full min-h-full flex items-center justify-center py-4"
+  >
+    <div class="items-center text-center space-y-4 w-4/5">
+      <app-hr-titled [text]="'registered'"></app-hr-titled>
+      <table
+        mat-table
+        [dataSource]="dataSource"
+        class="mat-elevation-z2 w-full"
+        multiTemplateDataRows
+      >
+        <!-- Index -->
+        <ng-container matColumnDef="index">
+          <th mat-header-cell *matHeaderCellDef>#</th>
+          <td mat-cell *matCellDef="let row; let i = dataIndex">{{ i }}</td>
+        </ng-container>
+
+        <!-- Column -->
+        <ng-container matColumnDef="column">
+          <th mat-header-cell *matHeaderCellDef>Column</th>
+          <td
+            mat-cell
+            *matCellDef="let row; let i = dataIndex"
+            (dblclick)="editRow(i)"
+          >
+            <span [class.text-red-600]="row.value.column.startsWith('!')">
+              {{ row.value.column }}
+            </span>
+          </td>
+        </ng-container>
+
+        <!-- Regex -->
+        <ng-container matColumnDef="regex">
+          <th mat-header-cell *matHeaderCellDef>regex</th>
+          <td mat-cell *matCellDef="let row; let i = dataIndex">
+            <div *ngIf="row.value.hasCases; then multiCase; else oneCase"></div>
+            <ng-template #multiCase>
+              <table>
+                <thead>
+                  <th>value</th>
+                  <th>rule</th>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let item of row.value.cases">
+                    <td>{{ item.value }}</td>
+                    <td>
+                      <pre>{{ item.rule }}</pre>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </ng-template>
+            <ng-template #oneCase>
+              <pre>{{ row.value.regex }}</pre>
+            </ng-template>
+          </td>
+        </ng-container>
+
+        <!-- Actions -->
+        <ng-container matColumnDef="actions">
+          <th mat-header-cell *matHeaderCellDef>actions</th>
+          <td mat-cell *matCellDef="let row; let i = dataIndex">
+            <div class="flex gap-1 justify-end">
+              <div *ngIf="!row.value.isSystem; else takeALook">
+                <fa-icon
+                  class="cursor-pointer"
+                  (click)="editRow(i)"
+                  [icon]="icons.pen"
+                ></fa-icon>
+                <fa-icon
+                  class="text-red-400 cursor-pointer"
+                  (click)="deleteRow(i)"
+                  [icon]="icons.x"
+                ></fa-icon>
+              </div>
+              <ng-template #takeALook>
+                <fa-icon
+                  class="cursor-pointer"
+                  (click)="editRow(i)"
+                  [icon]="icons.eye"
+                ></fa-icon>
+              </ng-template>
+            </div>
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr
+          mat-row
+          *matRowDef="let row; columns: displayedColumns"
+          (dblclick)="editRow(rowsControls.indexOf(row))"
+          [class.opacity-25]="row.value.isSystem"
+        ></tr>
+      </table>
+      <br />
+      <app-hr-titled [text]="'New automation'"></app-hr-titled>
+      <!-- ADD / EDIT FORM -->
+      <form
+        [formGroup]="newRowForm"
+        (ngSubmit)="addOrUpdateRow()"
+        class="space-y-2 mt-4"
+      >
+        <div class="grid grid-cols-1 sm:grid-cols-[1fr_auto]">
+          <input
+            class="form-control"
+            placeholder="Column"
+            formControlName="column"
+          />
+        </div>
+
+        <textarea
+          class="form-control"
+          placeholder="Value or Regex pattern"
+          formControlName="regex"
+        ></textarea>
+
+        <div class="text-right">
+          <div *ngIf="isNewRowFormSystem(); else editable">
+            <button class="btn btn-primary" (click)="resetForm()">clear</button>
+          </div>
+
+          <ng-template #editable>
+            <button class="btn btn-primary" type="submit">
+              {{ editingIndex !== null ? "Update" : "Add" }}
+            </button>
+          </ng-template>
+        </div>
+      </form>
+    </div>
+  </div>
+</ng-template>
+<ng-template #actions>
+  <button class="btn btn-primary" (click)="goBack()">
+    <fa-icon [icon]="icons.arrowLeft"></fa-icon>
+  </button>
+  <button class="btn btn-primary" (click)="applyConfig()">Apply</button>
+  <button class="btn btn-danger" (click)="go.close()">Close</button>
+</ng-template>

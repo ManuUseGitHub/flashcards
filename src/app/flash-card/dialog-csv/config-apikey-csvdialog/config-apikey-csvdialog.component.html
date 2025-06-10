@@ -1,0 +1,198 @@
+<ng-template #title>
+  <h1>
+    <fa-icon [icon]="icons.gear" class="autowidth"></fa-icon> CSV - API Key
+  </h1>
+</ng-template>
+<ng-template #body>
+  <div
+    class="absolute top-0 left-0 w-full min-h-full flex items-center justify-center py-4"
+  >
+    <div class="items-center text-center space-y-4 w-4/5">
+      <form [formGroup]="configForm" class="mt-4 text-left">
+        <!-- Step 1 -->
+        <div class="mb-4 flex flex-col p-4 border rounded">
+          <h5>Step 1: Get your DeepL API key</h5>
+          <p>
+            Sign up for the DeepL API at
+            <a target="_blank" href="https://www.deepl.com/en/pro#developer">
+              https://www.deepl.com/en/pro#developer
+            </a>
+            <br />
+            After logging in, you will find your API keys at
+            <a
+              target="_blank"
+              href="https://www.deepl.com/en/your-account/keys"
+            >
+              https://www.deepl.com/en/your-account/keys
+            </a>
+          </p>
+          <p>
+            Please take note that we will not retain the key in your navigator
+            for safety measure. Save it once you have it set.
+          </p>
+          <div class="mb-3 row gap-2">
+            <div class="col p-4 border rounded">
+              <h5>
+                <fa-icon [icon]="icons.shieldHeart"></fa-icon> Key registration
+              </h5>
+              <p>
+                Register your key into our system. Give it a name custom name or
+                leave empty. Pass then the key. It will be encrypted in our
+                systems and thus kept secret for further uses
+              </p>
+              <div class="input-group mb-4">
+                <div class="input-group-text">
+                  <fa-icon [icon]="icons.tag"> </fa-icon>
+                </div>
+
+                <input
+                  type="text"
+                  class="form-control"
+                  (keyup)="inputedKeyName($event)"
+                  placeholder="Name"
+                  formControlName="keyName"
+                />
+              </div>
+              <div class="input-group" [ngClass]="persistingKeyClass">
+                <div class="input-group-text">
+                  <fa-icon [icon]="icons.key"> </fa-icon>
+                  <fa-icon *ngIf="isPersistedKey" [icon]="icons.check">
+                  </fa-icon>
+                </div>
+
+                <input
+                  type="text"
+                  class="form-control"
+                  placeholder="API-KEY"
+                  formControlName="key"
+                  (focus)="onFocusKey()"
+                  (focusout)="onLostFocusKey()"
+                />
+                <div
+                  *ngIf="isPersistedKey"
+                  (click)="deleteKey()"
+                  class="input-group-text"
+                >
+                  <fa-icon [icon]="icons.x"></fa-icon>
+                </div>
+                <div (click)="upDateKey()" class="btn btn-primary">
+                  <fa-icon [icon]="icons.paperPlane"></fa-icon>
+                </div>
+              </div>
+            </div>
+            <div class="mx-auto col-md-6 flex flex-col p-4 border rounded">
+              <h5><fa-icon [icon]="icons.clock"></fa-icon> Key retention</h5>
+              <p>Limits the use of registrated key</p>
+              <app-form-selector-na
+                [compact]="true"
+                [text]="'Keep'"
+                [filterForm]="configForm"
+                [controlName]="'reuse'"
+                [options]="['once', 'for the day', 'everytime']"
+              >
+              </app-form-selector-na>
+              <div
+                class="bd-callout bd-callout-primary-border"
+                *ngIf="isKeyForTheDay"
+              >
+                The API Key is programmed to be forgoten in :
+                <h3
+                  class="my-2 text-center"
+                  *ngIf="isKeyForTheDay && !isFinishCountDown"
+                >
+                  {{ secondsRemaining$ | async | date : "HH:mm:ss" }}
+                </h3>
+              </div>
+              <div
+                class="bd-callout bd-callout-primary-border"
+                *ngIf="isKeyForSingleUse"
+              >
+                The API Key will be forgoten after you have consumed it for a
+                request.
+              </div>
+              <div
+                class="bd-callout bd-callout-success-border"
+                *ngIf="isKeyForEveryUses"
+              >
+                The API Key will not be forgoten after it is consumed a request.
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Step 2 -->
+        <div class="mb-4 flex flex-col p-4 border rounded">
+          <h5>Step 2: Test your API Key</h5>
+          <p>
+            Test your API key with a request.
+            <br />
+            Type something in the desired language.
+          </p>
+          <div class="p-4 border rounded">
+            <textarea
+              class="form-control"
+              placeholder="Type text to translate from NL to French"
+              formControlName="test"
+            ></textarea>
+            <div class="flex gap-4 py-4">
+              <div class="flex-1 text-end">
+                <div class="input-group" [formGroup]="configForm">
+                  <select class="form-select" [formControlName]="'target'">
+                    <option
+                      *ngFor="let target of targets"
+                      [value]="target.code"
+                    >
+                      <span *ngIf="target.pro">PRO</span>
+                      {{ target.name }}({{ target.code }})
+                    </option>
+                  </select>
+                  <button
+                    class="btn btn-primary"
+                    (click)="testKey()"
+                    [disabled]="isCharacterValid()"
+                  >
+                    Test
+                  </button>
+                </div>
+              </div>
+              <div class="">
+                <p
+                  class="text-end"
+                  [ngClass]="{ 'text-danger': isCharacterValid() }"
+                >
+                  {{ testCharacterCount }}/{{ testCharacterMax }}
+                </p>
+              </div>
+            </div>
+            <div
+              *ngIf="testResult"
+              class="flex-1 p-2 border rounded text-white bg-primary"
+            >
+              <h5>
+                <fa-icon [icon]="icons.circleChecked"></fa-icon> Translated
+              </h5>
+              <span class="text-xl">
+                {{ testResult }}
+              </span>
+            </div>
+          </div>
+        </div>
+        <div class="mb-4 flex flex-col p-4 border rounded">
+          <h5><fa-icon [icon]="icons.cicleInfo"></fa-icon> More info</h5>
+          <p>
+            <a target="_blank" href="https://developers.deepl.com/docs/">
+              https://developers.deepl.com/docs/
+            </a>
+          </p>
+        </div>
+      </form>
+    </div>
+  </div>
+</ng-template>
+<ng-template #actions>
+  <button class="btn btn-primary" (click)="goBack()">
+    <fa-icon [icon]="icons.arrowLeft"></fa-icon>
+  </button>
+  <button class="btn btn-primary" (click)="applyConfig(true)">Apply</button>
+  <button class="btn btn-danger" (click)="go.close()">Close</button>
+</ng-template>
